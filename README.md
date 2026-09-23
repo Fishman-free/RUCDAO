@@ -31,7 +31,7 @@ RUCDAO/
     └── assets/{css,js}/
 ```
 
-## 快速开始（v0 原型）
+## 快速开始（v0.2）
 
 ```powershell
 cd web
@@ -45,6 +45,12 @@ python -m http.server 8340
 cd contracts
 npm install          # 安装 solc
 npm run compile      # solcjs 编译 RuCoin.sol
+```
+
+全量验证（语法 / 双端 / 面板作用域 / 设计 token / 图标 / 禁词 / 合约 / HTTP 冒烟）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File verify.ps1   # 退出码 = 失败数
 ```
 
 ## 合规声明
