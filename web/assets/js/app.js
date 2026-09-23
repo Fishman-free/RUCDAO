@@ -21,7 +21,7 @@
       body: ["内容：A2 海报 1 张 + 朋友圈版式 1 套。", "要求：含 RUCDAO 米粒元素，可延展。", "投稿：源文件打包上传。"],
       reward: 300, slots: 2, field: "技能" },
     { type: "proj", tagline: "【活动】", title: "共学共创工作坊 #04：AI 也能做志愿项目管理", node: "信息学院志愿服务部",
-      body: ["10 月 18 日 19:00，信息楼报告厅。", "米粒支付：报名费 50 粒（到场全额返还 + 赠 30 粒），产出可申领任务赏金。"],
+      body: ["10 月 18 日 19:00，信息楼报告厅。", "米粒抵扣：报名费 50 粒（到场全额返还 + 赠 30 粒），产出可申领任务赏金。"],
       reward: 30, slots: 60, field: "技能" }
   ];
 
@@ -37,6 +37,8 @@
   ];
 
   var rewards = [
+    { icon: "🥖", title: "后勤面包券 · 1 张", cost: 300, note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
+    { icon: "☕", title: "面包房咖啡券", cost: 400, note: "券源商户赞助 · 一次性核销", voucher: true },
     { icon: "🍜", title: "食堂代金券 10 元", cost: 800, note: "东区食堂通用 · 每月限 2 张" },
     { icon: "☕", title: "精品咖啡券", cost: 600, note: "校内咖啡厅 · 中杯任选" },
     { icon: "🖨️", title: "打印券 50 页", cost: 400, note: "图书馆文印中心" },
@@ -60,7 +62,7 @@
     { k: "★", n: "星级志愿者" }, { k: "影", n: "校园摄影" }, { k: "修", n: "硬件维修" }
   ];
 
-  var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {} };
+  var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {}, vouchers: [] };
 
   // ---------------- 工具 ----------------
   function $(sel) { return document.querySelector(sel); }
@@ -140,6 +142,19 @@
     }).join("");
   }
 
+  function renderVouchers() {
+    var el = $("#voucher-list");
+    if (!state.vouchers.length) {
+      el.innerHTML = '<p class="muted">暂无券。去权益商店用米粒兑一张面包券试试。</p>';
+      return;
+    }
+    el.innerHTML = state.vouchers.map(function (v) {
+      return '<div class="voucher"><b>' + esc(v.title) + '</b>' +
+        '<span class="voucher-code">' + esc(v.code) + '</span>' +
+        '<span class="voucher-note">' + esc(v.note) + '</span></div>';
+    }).join("");
+  }
+
   // ---------------- 交互 ----------------
   function switchTab(name) {
     document.querySelectorAll(".nav-btn").forEach(function (b) {
@@ -180,8 +195,14 @@
       state.redeemed[t.dataset.buy] = true;
       state.balance -= r.cost;
       ledger.unshift({ amt: -r.cost, txt: "兑换：" + r.title, hash: "0x" + Math.random().toString(16).slice(2, 6) + "…演示 · redeem" });
-      updateBalance(); renderRewards(); renderLedger();
-      toast("兑换成功（演示）· 凭码到志协办公室核销。");
+      var msg = "兑换成功（演示）· 凭码到志协办公室核销。";
+      if (r.voucher) {
+        var code = "RN-" + Math.random().toString(16).slice(2, 6).toUpperCase() + "-" + Math.random().toString(16).slice(2, 6).toUpperCase();
+        state.vouchers.unshift({ title: r.title, code: code, note: "限本人 · 当日有效 · 一次性核销" });
+        msg = "兑券成功（演示）· 券码 " + code + " 已存入券包，到店出示即可核销。";
+      }
+      updateBalance(); renderRewards(); renderLedger(); renderVouchers();
+      toast(msg);
     }
     if (t.id === "wallet-btn" || t.id === "wallet-btn-2") { connectWallet(); }
   });
@@ -215,6 +236,6 @@
   });
 
   // ---------------- 启动 ----------------
-  renderFeed(); renderFilters(); renderProjects(); renderRewards(); renderLedger(); updateBalance(); preview();
+  renderFeed(); renderFilters(); renderProjects(); renderRewards(); renderLedger(); renderVouchers(); updateBalance(); preview();
   console.log("RUCDAO v0 原型已启动 · 米粒不可转让、不可兑换现金 · github.com/Fishman-free/RUCDAO");
 })();

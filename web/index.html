@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="RUCDAO — 人民大学校内志愿服务 DAO 平台：志愿项目聚合、米粒贡献凭证、权益兑换、志愿北京录入直通车。">
-  <title>RUCDAO · 人大志愿 DAO 平台</title>
+  <title>RUCDAO · PoV 志愿服务贡献证明 · 人大志愿平台</title>
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
@@ -43,8 +43,18 @@
       <div class="layout-2col">
         <div>
           <div class="hero">
-            <h1>把志愿项目，<br>种进同一片田野。</h1>
-            <p>全校志愿项目一处聚合 · 参与即记录 · 米粒（RUCOIN）贡献凭证链上存证 · 志愿北京时长直通车录入。<em>米粒不可转让、不可兑换现金。</em></p>
+            <h1>PoV · 把志愿服务，<br>变成可验证的贡献证明。</h1>
+            <p><b>PoV（Proof of Volunteer，志愿服务贡献证明）</b>：服务即记录，记录即米粒，米粒兑权益——从一张面包券开始。全校志愿项目一处聚合 · 志愿北京时长直通车录入。<em>米粒与人民币不挂钩，不可充值、不可转让、不可兑换现金。</em></p>
+          </div>
+          <div class="card pov-strip">
+            <h3 class="card-title">PoV 怎么运转 · 四步</h3>
+            <ol class="pov-steps">
+              <li><b>服务</b><span>报名项目、真实参与，负责人确认到岗与工时。</span></li>
+              <li><b>存证</b><span>服务记录核验后链上存证，志愿北京同步时长。</span></li>
+              <li><b>米粒</b><span>按时长 × 难度系数发放：1 小时 = 100 粒 × 系数。</span></li>
+              <li><b>回响</b><span>兑面包券、周边、参访机会，也是提案的投票权。</span></li>
+            </ol>
+            <p class="muted">定义：PoV 是对发放机制的类比命名——RUCOIN 不做哈希运算、不消耗算力、不涉及链上共识竞赛，它是志愿服务记录的链上存证。</p>
           </div>
           <h2 class="section-title">广场 · 任务与招募</h2>
           <div id="feed-list" class="feed"></div>
@@ -89,7 +99,7 @@
     <!-- ================= 权益商店 ================= -->
     <section id="rewards" class="tab" role="tabpanel" aria-label="权益商店">
       <h2 class="section-title">权益商店 · 颗粒归仓</h2>
-      <p class="muted shop-note">米粒兑换的是<b>权益与机会</b>，不是钱；志愿时长永远按真实服务在志愿北京如实记录。</p>
+      <p class="muted shop-note">米粒兑换的是<b>券与权益</b>，不是钱；商品与券由合作商户以人民币标价、结算，米粒与人民币不挂钩。志愿时长永远按真实服务在志愿北京如实记录。</p>
       <div id="reward-grid" class="grid"></div>
     </section>
 
@@ -119,6 +129,10 @@
             <p class="muted">学号 <b>2023xxxxxx</b> 已绑定志愿北京账号，时长由项目负责人确认后批量录入（通常 &lt; 7 天）。</p>
             <div class="sync-bar"><span style="width:90%"></span></div>
             <p class="muted">已同步 42h / 46.5h</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">我的券包</h3>
+            <div id="voucher-list"></div>
           </div>
           <div class="card">
             <h3 class="card-title">钱包绑定</h3>
