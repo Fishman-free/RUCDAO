@@ -1,0 +1,10 @@
+{
+  "name": "rucdao",
+  "version": "0.2.0",
+  "private": true,
+  "description": "RUCDAO - PoV volunteer platform (dual-role prototype, RuCoin ledger contract, docs)",
+  "scripts": {
+    "test": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File verify.ps1",
+    "verify": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File verify.ps1"
+  }
+}
