@@ -1,0 +1,12 @@
+{
+  "name": "rucdao-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RUCOIN (米粒) soulbound volunteer credit ledger",
+  "scripts": {
+    "compile": "solcjs --bin --abi --optimize -o build RuCoin.sol"
+  },
+  "devDependencies": {
+    "solc": "0.8.26"
+  }
+}
