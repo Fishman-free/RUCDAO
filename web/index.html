@@ -102,7 +102,12 @@
 
       <section id="s-rewards" class="pane" role="tabpanel" aria-label="权益商店">
         <h2 class="section-title">权益商店 · 颗粒归仓</h2>
-        <p class="muted shop-note">时数是本体，米粒是记法；兑换的是<b>券与权益</b>，商品由合作商户以人民币标价、结算。</p>
+        <p class="muted shop-note">米粒兑换的是<b>券与权益</b>，不是钱；商品与券由合作商户以人民币标价、结算，米粒与人民币不挂钩。志愿时长永远按真实服务在志愿北京如实记录。</p>
+        <div class="card">
+          <h3 class="card-title">回馈受理网络</h3>
+          <p class="muted">校内机构以券源与受理方身份参与，米粒兑出的券在各机构核销——"流通"指兑换与抵扣场景的覆盖，同学之间不可转让。</p>
+          <div id="inst-list" class="inst-list"></div>
+        </div>
         <div id="reward-grid" class="grid"></div>
       </section>
 
@@ -176,15 +181,17 @@
             <input id="p-place" placeholder="校内 · 教工社区" style="flex:0 1 220px">
             <input id="p-time" placeholder="10.26 周六 14:00" style="flex:0 1 180px">
           </div>
-          <div class="form-row">
-            <label for="p-slots">岗位数 / 单人时长</label>
-            <input id="p-slots" type="number" value="8" min="1" style="width:90px"> <span class="muted">个 /</span>
-            <input id="p-hours" type="number" value="4" min="1" style="width:70px"> <span class="muted">小时</span>
+          <div class="form-row form-row--top">
+            <label>职位定价表</label>
+            <div class="pos-wrap">
+              <div id="pos-list" class="pos-list"></div>
+              <button type="button" class="btn btn--gray" id="pos-add"><i class="ri-add-line" aria-hidden="true"></i>添加职位</button>
+              <p class="muted">米粒数额由项目组按职位核定（参考基准：1 小时 = 100 粒，技能型、艰苦岗可上浮），报名前公示；服务确认后按定价发放，不设互评。成果不合格可减付并说明理由，志愿者可向仲裁委员会申诉。</p>
+            </div>
           </div>
           <div class="form-row">
-            <label for="p-ratio">难度系数</label>
-            <select id="p-ratio"><option value="1">普通 1.0</option><option value="1.5">技能型 1.5</option><option value="2">艰苦偏远 2.0</option></select>
-            <span class="muted">每人发放：<b id="p-preview">800</b> 粒 = <b id="p-preview-h">8.0</b> 小时</span>
+            <label>预计发放</label>
+            <span class="muted">合计：<b id="p-preview">0</b> 粒 = <b id="p-preview-h">0.0</b> 小时认证时数</span>
           </div>
           <div class="form-row">
             <label class="check"><input type="checkbox" checked> 同步至志愿北京建项</label>

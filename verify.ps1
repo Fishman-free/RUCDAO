@@ -23,6 +23,9 @@ Check ("DOM id cross-check (" + $ids.Count + " ids)") ($missing.Count -eq 0) ($m
 
 Check 'pane-scope: activate() scoped to role container' (($js -match "closest\('div\[id\^=") -and -not ($js -match 'document\.querySelectorAll\("\.pane"\)'))
 Check 'dual-role panes + issue flow' (($html -match 'id="role-student"') -and ($html -match 'id="role-publisher"') -and ($js -match 'switchRole') -and ($js -match 'data-issue'))
+Check 'publish flow: position pricing (project-team set per role)' (($html -match 'id="pos-list"') -and ($js -match 'pos-row') -and ($js -match '\u804c\u4f4d\u5b9a\u4ef7'))
+Check 'rewards: campus institution network (canteen etc.)' (($html -match 'id="inst-list"') -and ($js -match '\u5927\u4f19\u98df\u5802'))
+Check 'no peer-review metering in product copy' (-not (($html + $js) -match '\u4e92\u8bc4\u5b9a\u4ef7|\u4e92\u8bc4\u8bb0\u5f55'))
 Check 'Apple tokens (font/grid/radius/spring/glass/dark/reduced-motion/RUC-red)' (($css -match 'SF Pro') -and ($css -match '--space-xs: 4px') -and ($css -match '--radius-lg: 16px') -and ($css -match 'cubic-bezier\(0\.34, 1\.56') -and ($css -match 'backdrop-filter: saturate\(180%\) blur') -and ($css -match '\[data-theme="dark"\]') -and ($css -match 'prefers-reduced-motion') -and ($css -match '--accent: #8C2229'))
 
 $iconCss = Get-Content "$root\web\assets\icons\remixicon.css" -Raw

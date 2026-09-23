@@ -40,12 +40,21 @@
   var rewards = [
     { icon: "ri-coupon-fill",     title: "后勤面包券 · 1 张",   cost: 300,  note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
     { icon: "ri-cup-fill",        title: "面包房咖啡券",        cost: 400,  note: "券源商户赞助 · 一次性核销", voucher: true },
-    { icon: "ri-restaurant-fill", title: "食堂代金券 10 元",    cost: 800,  note: "东区食堂通用 · 每月限 2 张", voucher: true },
+    { icon: "ri-restaurant-fill", title: "大伙食堂基本伙代金券 10 元", cost: 800, note: "大伙食堂（基本伙）· 一次性核销", voucher: true },
+    { icon: "ri-shopping-bag-fill", title: "校园超市代金券 5 元", cost: 450,  note: "校园超市 · 一次性核销", voucher: true },
     { icon: "ri-printer-fill",    title: "打印券 50 页",        cost: 400,  note: "图书馆文印中心" },
     { icon: "ri-gift-fill",       title: "RUCDAO 文创卫衣",     cost: 3000, note: "稻穗印章限定款 · 每学期 50 件" },
     { icon: "ri-bus-2-fill",      title: "名企参访名额",        cost: 2500, note: "每学期 2 次 · 含车旅" },
     { icon: "ri-seedling-fill",   title: "暑期乡村实践优先名额", cost: 3500, note: "龙潭村等共建村庄" },
     { icon: "ri-award-fill",      title: "年度志愿之星奖杯 + 证书", cost: 5000, note: "校志协年会颁发 · 附荣誉徽章" }
+  ];
+
+  var institutions = [
+    { name: "大伙食堂（基本伙）", items: "基本伙代金券", status: "洽谈中" },
+    { name: "学一食堂面包房", items: "面包券 · 咖啡券", status: "已签约" },
+    { name: "校园超市", items: "超市代金券", status: "洽谈中" },
+    { name: "图书馆文印中心", items: "打印券", status: "已签约" },
+    { name: "体育馆 / 洗衣房", items: "场地券 · 洗衣券", status: "规划中" }
   ];
 
   var ledger = [
@@ -68,15 +77,18 @@
   ];
 
   var myProjects = [
-    { title: "电脑义诊 · 教工社区站", field: "技能", slots: 8, joined: 5, confirmed: 3, hours: 4, ratio: 1.5 },
-    { title: "银龄数字课堂 · 第 5 期", field: "助老", slots: 4, joined: 4, confirmed: 0, hours: 2, ratio: 1.2 },
-    { title: "【任务】市集海报设计", field: "技能", slots: 2, joined: 2, confirmed: 1, hours: 3, ratio: 1.5 }
+    { title: "电脑义诊 · 教工社区站", field: "技能", joined: 5, confirmed: 3,
+      positions: [{ name: "硬件维修员", slots: 5, price: 600 }, { name: "咨询引导员", slots: 3, price: 300 }] },
+    { title: "银龄数字课堂 · 第 5 期", field: "助老", joined: 4, confirmed: 0,
+      positions: [{ name: "授课志愿者", slots: 3, price: 240 }, { name: "助教", slots: 1, price: 180 }] },
+    { title: "【任务】市集海报设计", field: "技能", joined: 2, confirmed: 1,
+      positions: [{ name: "平面设计", slots: 2, price: 450 }] }
   ];
 
   var issueList = [
-    { name: "王小禾", project: "电脑义诊 · 教工社区站", hours: 4, ratio: 1.5 },
-    { name: "林一舟", project: "电脑义诊 · 教工社区站", hours: 4, ratio: 1.5 },
-    { name: "赵麦",   project: "【任务】市集海报设计",  hours: 3, ratio: 1.5 }
+    { name: "王小禾", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 600 },
+    { name: "林一舟", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 600 },
+    { name: "赵麦",   project: "【任务】市集海报设计",  position: "平面设计",   price: 450 }
   ];
 
   var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {} };
@@ -179,6 +191,14 @@
     }).join("");
   }
 
+  function renderInstitutions() {
+    var el = $("#inst-list");
+    if (!el) return;
+    el.innerHTML = institutions.map(function (it) {
+      return '<span class="inst-chip"><b>' + esc(it.name) + '</b>' + esc(it.items) + '<i>' + esc(it.status) + '</i></span>';
+    }).join("");
+  }
+
   function renderRank() {
     $("#rank-list").innerHTML = ranks.map(function (r) {
       return '<li><span class="rank-name">' + esc(r.name) + '</span><span class="rank-num">' + r.h.toFixed(1) + ' h</span></li>';
@@ -191,9 +211,9 @@
       return '<article class="card mg-card">' +
         '<div><span class="tag ' + esc(p.field) + '">' + esc(p.field) + '</span>' +
         '<h3 style="font-size:17px;font-weight:700;margin:4px 0">' + esc(p.title) + '</h3>' +
-        '<p class="muted">' + p.hours + ' 小时/人 × ' + p.ratio + ' 系数 = ' + Math.round(p.hours * 100 * p.ratio) + ' 粒/人</p></div>' +
+        '<p class="muted">职位定价：' + p.positions.map(function (q) { return esc(q.name) + ' ' + q.slots + ' 人 × ' + fmt(q.price) + ' 粒'; }).join('；') + '</p></div>' +
         '<div><div class="mg-progress">' +
-        '<div><strong>' + p.joined + '/' + p.slots + '</strong><span>已报名</span></div>' +
+        '<div><strong>' + p.joined + '/' + p.positions.reduce(function (s, q) { return s + q.slots; }, 0) + '</strong><span>已报名</span></div>' +
         '<div><strong>' + p.confirmed + '</strong><span>已确认服务</span></div>' +
         '</div><div class="mg-actions" style="margin-top:12px">' +
         '<button class="btn btn--tinted" data-confirm="' + i + '">确认服务记录</button>' +
@@ -203,10 +223,10 @@
 
   function renderIssues() {
     $("#issue-list").innerHTML = issueList.map(function (r, i) {
-      var amt = Math.round(r.hours * 100 * r.ratio);
+      var amt = r.price;
       var done = state.issued[i];
       return '<div class="issue-row">' +
-        '<div class="issue-who"><b>' + esc(r.name) + '</b><span class="muted">' + esc(r.project) + ' · ' + r.hours + 'h × ' + r.ratio + '</span></div>' +
+        '<div class="issue-who"><b>' + esc(r.name) + '</b><span class="muted">' + esc(r.project) + ' · ' + esc(r.position) + '（职位定价）</span></div>' +
         '<div class="issue-amt"><b>' + fmt(amt) + ' 粒</b><span>= ' + toHours(amt) + ' 小时认证时数</span></div>' +
         '<button class="btn btn--filled" data-issue="' + i + '"' + (done ? " disabled" : "") + '>' +
         '<i class="ri-hand-heart-fill" aria-hidden="true"></i>' + (done ? "已发放 ✓" : "发放 + 上链存证") + '</button></div>';
@@ -308,7 +328,7 @@
     }
     if (t.dataset.issue !== undefined && !state.issued[t.dataset.issue]) {
       var rec = issueList[+t.dataset.issue];
-      var amt = Math.round(rec.hours * 100 * rec.ratio);
+      var amt = rec.price;
       state.issued[t.dataset.issue] = true;
       state.balance += amt;
       ledger.unshift({ amt: amt, txt: rec.name + " · " + rec.project + " 发放", hash: "0x" + Math.random().toString(16).slice(2, 6) + "…演示 · award" });
@@ -334,24 +354,49 @@
     }
   }
 
-  // 发布表单预估
-  var ratioSel = $("#p-ratio"), hoursIn = $("#p-hours"), slotsIn = $("#p-slots");
-  function preview() {
-    var m = (+hoursIn.value || 0) * 100 * (+ratioSel.value || 1);
-    $("#p-preview").textContent = fmt(m);
-    $("#p-preview-h").textContent = toHours(m);
+  // 发布表单：职位定价（项目组逐职位核定，不设互评）
+  function posRow(name, slots, price) {
+    var div = document.createElement("div");
+    div.className = "pos-row";
+    div.innerHTML = '<input class="pos-name" placeholder="职位名，如 授课志愿者" value="' + (name || '') + '">' +
+      '<input class="pos-slots" type="number" min="1" placeholder="人数" value="' + (slots || 1) + '">' +
+      '<input class="pos-price" type="number" min="0" placeholder="米粒/人" value="' + (price || '') + '">' +
+      '<button type="button" class="icon-btn pos-del" aria-label="删除职位"><i class="ri-delete-bin-line" aria-hidden="true"></i></button>';
+    div.querySelector(".pos-del").addEventListener("click", function () {
+      if (document.querySelectorAll(".pos-row").length > 1) { div.remove(); } else { toast("至少保留一个职位。"); }
+      preview();
+    });
+    div.addEventListener("input", preview);
+    $("#pos-list").appendChild(div);
+    preview();
   }
-  [ratioSel, hoursIn, slotsIn].forEach(function (el) { el.addEventListener("input", preview); });
+  function preview() {
+    var total = 0;
+    document.querySelectorAll(".pos-row").forEach(function (row) {
+      total += (+row.querySelector(".pos-slots").value || 0) * (+row.querySelector(".pos-price").value || 0);
+    });
+    $("#p-preview").textContent = fmt(total);
+    $("#p-preview-h").textContent = toHours(total);
+  }
+  $("#pos-add").addEventListener("click", function () { posRow(); });
   $("#publish-form").addEventListener("submit", function (e) {
     e.preventDefault();
+    var positions = [];
+    document.querySelectorAll(".pos-row").forEach(function (row) {
+      var n = row.querySelector(".pos-name").value.trim() || "志愿者";
+      var s = +row.querySelector(".pos-slots").value || 1;
+      var pr = +row.querySelector(".pos-price").value || 0;
+      if (pr > 0) positions.push({ name: n, slots: s, price: pr });
+    });
+    if (!positions.length) { toast("请为至少一个职位核定米粒数。"); return; }
     myProjects.unshift({
       title: $("#p-title").value, field: $("#p-field").value,
-      slots: +$("#p-slots").value || 1, joined: 0, confirmed: 0,
-      hours: +$("#p-hours").value || 1, ratio: +$("#p-ratio").value
+      joined: 0, confirmed: 0, positions: positions
     });
     renderManage();
     toast("已提交审核（演示）· 审核通过后自动同步志愿北京建项。");
-    e.target.reset(); preview();
+    e.target.reset();
+    $("#pos-list").innerHTML = ""; posRow("志愿者", 4, 400);
   });
 
   // ---------------- 启动 ----------------
@@ -359,6 +404,6 @@
   bindTabs("data-stab"); bindTabs("data-ptab");
   renderFeed(); renderFilters(); renderProjects(); renderRewards();
   renderLedger(); renderBadges(); renderVouchers(); renderRank();
-  renderManage(); renderIssues(); updateBalance(); preview();
+  renderManage(); renderIssues(); renderInstitutions(); updateBalance(); posRow("志愿者", 4, 400);
   console.log("RUCDAO v0.2 · 学生端/发布端 · PoV 志愿服务贡献证明 · RUCOIN = 时数认证（1 小时 = 100 粒）");
 })();
