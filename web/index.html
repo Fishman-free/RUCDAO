@@ -1,185 +1,214 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RUCDAO — 人民大学校内志愿服务 DAO 平台：志愿项目聚合、米粒贡献凭证、权益兑换、志愿北京录入直通车。">
-  <title>RUCDAO · PoV 志愿服务贡献证明 · 人大志愿平台</title>
+  <meta name="description" content="RUCDAO — PoV（Proof of Volunteer）志愿服务平台：学生端寻找并完成志愿，发布端发布并认证时数。RUCOIN 即志愿时数认证。">
+  <title>RUCDAO · PoV 志愿服务贡献证明 · 学生端 / 发布端</title>
+  <link rel="stylesheet" href="assets/icons/remixicon.css">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主内容</a>
 
-  <header class="topbar">
-    <div class="brand">
-      <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
-        <rect x="2" y="2" width="60" height="60" rx="9" fill="#B4442F"/>
-        <rect x="6.5" y="6.5" width="51" height="51" rx="6" fill="none" stroke="#FBF5E9" stroke-width="1.6" opacity="0.85"/>
-        <path d="M20 46c3-9 4-16 3-24M44 46c-3-9-4-16-3-24" stroke="#FBF5E9" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <path d="M23 30c-2.6-1-4.4-3-5-5.6 2.8-.2 5 .8 6.2 3M23 37c-2.6-1-4.4-3-5-5.6 2.8-.2 5 .8 6.2 3M41 30c2.6-1 4.4-3 5-5.6-2.8-.2-5 .8-6.2 3M41 37c2.6-1 4.4-3 5-5.6-2.8-.2-5 .8-6.2 3" fill="#FBF5E9" opacity="0.92"/>
-        <text x="32" y="30" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="21" font-weight="700" fill="#FBF5E9">米</text>
-        <text x="32" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" letter-spacing="1.5" fill="#FBF5E9" opacity="0.95">RUCDAO</text>
-      </svg>
-      <div class="brand-text">
-        <strong>RUCDAO</strong>
-        <small>人大志愿 DAO · 米粒计划</small>
+  <header class="nav">
+    <div class="nav__inner">
+      <div class="brand">
+        <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="9" fill="#B4442F"/>
+          <rect x="6.5" y="6.5" width="51" height="51" rx="6" fill="none" stroke="#FBF5E9" stroke-width="1.6" opacity="0.85"/>
+          <path d="M20 46c3-9 4-16 3-24M44 46c-3-9-4-16-3-24" stroke="#FBF5E9" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M23 30c-2.6-1-4.4-3-5-5.6 2.8-.2 5 .8 6.2 3M23 37c-2.6-1-4.4-3-5-5.6 2.8-.2 5 .8 6.2 3M41 30c2.6-1 4.4-3 5-5.6-2.8-.2-5 .8-6.2 3M41 37c2.6-1 4.4-3 5-5.6-2.8-.2-5 .8-6.2 3" fill="#FBF5E9" opacity="0.92"/>
+          <text x="32" y="30" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="21" font-weight="700" fill="#FBF5E9">米</text>
+          <text x="32" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" letter-spacing="1.5" fill="#FBF5E9" opacity="0.95">RUCDAO</text>
+        </svg>
+        <div class="brand-text"><strong>RUCDAO</strong><small>PoV · 志愿服务贡献证明</small></div>
+      </div>
+
+      <div class="segmented" role="tablist" aria-label="角色切换">
+        <button class="seg-btn active" role="tab" aria-selected="true" data-role="student">
+          <i class="ri-user-fill" aria-hidden="true"></i>学生端
+        </button>
+        <button class="seg-btn" role="tab" aria-selected="false" data-role="publisher">
+          <i class="ri-file-list-3-fill" aria-hidden="true"></i>发布端
+        </button>
+      </div>
+
+      <div class="nav__actions">
+        <button id="theme-btn" class="icon-btn" aria-label="切换深浅色模式"><i class="ri-moon-fill" aria-hidden="true"></i></button>
+        <button id="wallet-btn" class="btn btn--tinted"><i class="ri-wallet-3-fill" aria-hidden="true"></i>绑定钱包</button>
       </div>
     </div>
-
-    <nav class="nav" role="tablist" aria-label="主导航">
-      <button class="nav-btn active" role="tab" aria-selected="true"  data-tab="plaza">广场</button>
-      <button class="nav-btn" role="tab" aria-selected="false" data-tab="projects">项目库</button>
-      <button class="nav-btn" role="tab" aria-selected="false" data-tab="rewards">权益商店</button>
-      <button class="nav-btn" role="tab" aria-selected="false" data-tab="me">我的</button>
-      <button class="nav-btn" role="tab" aria-selected="false" data-tab="publish">发布</button>
-    </nav>
-
-    <button id="wallet-btn" class="wallet-btn">绑定钱包</button>
   </header>
 
   <main id="main">
-    <!-- ================= 广场 ================= -->
-    <section id="plaza" class="tab active" role="tabpanel" aria-label="广场">
-      <div class="layout-2col">
-        <div>
-          <div class="hero">
-            <h1>PoV · 把志愿服务，<br>变成可验证的贡献证明。</h1>
-            <p><b>PoV（Proof of Volunteer，志愿服务贡献证明）</b>：服务即记录，记录即米粒，米粒兑权益——从一张面包券开始。全校志愿项目一处聚合 · 志愿北京时长直通车录入。<em>米粒与人民币不挂钩，不可充值、不可转让、不可兑换现金。</em></p>
-          </div>
-          <div class="card pov-strip">
-            <h3 class="card-title">PoV 怎么运转 · 四步</h3>
-            <ol class="pov-steps">
-              <li><b>服务</b><span>报名项目、真实参与，负责人确认到岗与工时。</span></li>
-              <li><b>存证</b><span>服务记录核验后链上存证，志愿北京同步时长。</span></li>
-              <li><b>米粒</b><span>按时长 × 难度系数发放：1 小时 = 100 粒 × 系数。</span></li>
-              <li><b>回响</b><span>兑面包券、周边、参访机会，也是提案的投票权。</span></li>
-            </ol>
-            <p class="muted">定义：PoV 是对发放机制的类比命名——RUCOIN 不做哈希运算、不消耗算力、不涉及链上共识竞赛，它是志愿服务记录的链上存证。</p>
-          </div>
-          <h2 class="section-title">广场 · 任务与招募</h2>
-          <div id="feed-list" class="feed"></div>
-        </div>
-        <aside class="sidebar">
-          <div class="card rice-card">
-            <div class="rice-card-head">
-              <svg class="wheat" viewBox="0 0 40 24" aria-hidden="true"><path d="M8 22c2-7 3-12 2-18M32 22c-2-7-3-12-2-18" stroke="#8E6F3E" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M10 10c-2.4-1-4-2.8-4.6-5.2 2.6-.2 4.6.8 5.7 2.8M10 16c-2.4-1-4-2.8-4.6-5.2 2.6-.2 4.6.8 5.7 2.8M30 10c2.4-1 4-2.8 4.6-5.2-2.6-.2-4.6.8-5.7 2.8M30 16c2.4-1 4-2.8 4.6-5.2-2.6-.2-4.6.8-5.7 2.8" fill="#C9A227"/></svg>
-              <span>我的米粒</span>
+    <!-- ==================== 学生端 ==================== -->
+    <div id="role-student">
+      <nav class="tabs" role="tablist" aria-label="学生端导航">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-stab="s-plaza"><i class="ri-home-5-fill" aria-hidden="true"></i>广场</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-projects"><i class="ri-compass-3-fill" aria-hidden="true"></i>项目库</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-rewards"><i class="ri-shopping-bag-fill" aria-hidden="true"></i>权益商店</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-me"><i class="ri-user-fill" aria-hidden="true"></i>我的</button>
+      </nav>
+
+      <section id="s-plaza" class="pane active" role="tabpanel" aria-label="广场">
+        <div class="layout-2col">
+          <div>
+            <div class="hero">
+              <h1>PoV · 把志愿服务，<br>变成可验证的贡献证明。</h1>
+              <p><b>RUCOIN 就是志愿时数的认证方式</b>——每一粒都来自真实服务，余额即认证时数账本：1 小时 = 100 粒。找项目、做志愿、时数入账、兑权益，在这里一气呵成。</p>
             </div>
-            <p class="rice-num"><span id="balance-quick">2,340</span> <small>粒</small></p>
-            <p class="muted">累计志愿服务 <strong>46.5</strong> 小时 · 志愿北京已同步 42h</p>
-            <button class="btn btn-ghost" data-goto="me">查看账本 →</button>
-          </div>
-          <div class="card">
-            <h3 class="card-title">本月米粒榜</h3>
-            <ol class="rank">
-              <li><span class="rank-name">王小禾</span><span class="rank-num">4,120 粒</span></li>
-              <li><span class="rank-name">林一舟</span><span class="rank-num">3,880 粒</span></li>
-              <li><span class="rank-name">赵麦</span><span class="rank-num">3,550 粒</span></li>
-            </ol>
-          </div>
-          <div class="card covenant">
-            <h3 class="card-title">社区公约 · 三条铁律</h3>
-            <ul class="covenant-list">
-              <li>米粒<b>不可转让、不可兑换现金</b></li>
-              <li>时长<b>只按真实服务录入</b></li>
-              <li>发放规则<b>公开透明、节点共治</b></li>
-            </ul>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ================= 项目库 ================= -->
-    <section id="projects" class="tab" role="tabpanel" aria-label="项目库">
-      <h2 class="section-title">项目库 · 找到你的方向</h2>
-      <div class="filters" id="filters" role="group" aria-label="领域筛选"></div>
-      <div id="project-grid" class="grid"></div>
-    </section>
-
-    <!-- ================= 权益商店 ================= -->
-    <section id="rewards" class="tab" role="tabpanel" aria-label="权益商店">
-      <h2 class="section-title">权益商店 · 颗粒归仓</h2>
-      <p class="muted shop-note">米粒兑换的是<b>券与权益</b>，不是钱；商品与券由合作商户以人民币标价、结算，米粒与人民币不挂钩。志愿时长永远按真实服务在志愿北京如实记录。</p>
-      <div id="reward-grid" class="grid"></div>
-    </section>
-
-    <!-- ================= 我的 ================= -->
-    <section id="me" class="tab" role="tabpanel" aria-label="我的">
-      <h2 class="section-title">我的 · 志愿档案</h2>
-      <div class="layout-2col">
-        <div>
-          <div class="card me-summary">
-            <div class="me-num"><span id="balance-main">2,340</span><small>米粒（粒）</small></div>
-            <div class="me-sub">
-              <div><strong>46.5 h</strong><span>累计时长</span></div>
-              <div><strong>12</strong><span>参与项目</span></div>
-              <div><strong>3</strong><span>点亮徽章</span></div>
+            <div class="card pov-strip">
+              <h2 class="card-title">PoV 怎么运转 · 四步</h2>
+              <ol class="pov-steps">
+                <li><b>服务</b><span>报名项目、真实参与，负责人确认到岗与工时。</span></li>
+                <li><b>存证</b><span>服务记录核验后链上存证，志愿北京同步录入。</span></li>
+                <li><b>认证</b><span>RUCOIN 入账，1 小时 = 100 粒，余额即时数。</span></li>
+                <li><b>回响</b><span>兑面包券、周边、参访机会，也是提案投票权。</span></li>
+              </ol>
+              <p class="muted">RUCOIN 与人民币不挂钩、不可转让；它对标的是志愿时数，兑换的是券与权益。</p>
             </div>
+            <h2 class="section-title">广场 · 任务与招募</h2>
+            <div id="feed-list" class="feed"></div>
           </div>
-          <h3 class="card-title">米粒账本（链上存证影子）</h3>
-          <div id="ledger" class="ledger"></div>
+          <aside class="sidebar">
+            <div class="card hours-card">
+              <div class="hours-card-head"><i class="ri-verified-badge-fill" aria-hidden="true"></i><span>我的认证时数</span></div>
+              <p class="hours-num"><span id="balance-quick">2,340</span><small>粒 = <span id="hours-quick">23.4</span> 小时</small></p>
+              <p class="muted">志愿北京已同步 42h · 记录可查可验</p>
+              <button class="btn btn--plain" data-goto="s-me">查看账本 →</button>
+            </div>
+            <div class="card">
+              <h2 class="card-title">本月时数榜</h2>
+              <ol class="rank" id="rank-list"></ol>
+            </div>
+            <div class="card covenant">
+              <h2 class="card-title">社区公约 · 三条铁律</h2>
+              <ul class="covenant-list">
+                <li>RUCOIN <b>对标志愿时数</b>，不与人民币挂钩</li>
+                <li>时数<b>只按真实服务认证</b></li>
+                <li>发放规则<b>公开透明、节点共治</b></li>
+              </ul>
+            </div>
+          </aside>
         </div>
-        <aside class="sidebar">
-          <div class="card">
-            <h3 class="card-title">SBT 徽章</h3>
-            <div class="badges" id="badges"></div>
-          </div>
-          <div class="card">
-            <h3 class="card-title">志愿北京 · 录入直通车</h3>
-            <p class="muted">学号 <b>2023xxxxxx</b> 已绑定志愿北京账号，时长由项目负责人确认后批量录入（通常 &lt; 7 天）。</p>
-            <div class="sync-bar"><span style="width:90%"></span></div>
-            <p class="muted">已同步 42h / 46.5h</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">我的券包</h3>
-            <div id="voucher-list"></div>
-          </div>
-          <div class="card">
-            <h3 class="card-title">钱包绑定</h3>
-            <p class="muted" id="wallet-state">默认托管钱包（学号即账户）。可绑定自有钱包用于查看链上存证。</p>
-            <button class="btn" id="wallet-btn-2">绑定 MetaMask（测试网演示）</button>
-          </div>
-        </aside>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================= 发布 ================= -->
-    <section id="publish" class="tab" role="tabpanel" aria-label="发布">
-      <h2 class="section-title">发布 · 节点工作台</h2>
-      <form class="card form" id="publish-form">
-        <div class="form-row">
-          <label for="p-type">类型</label>
-          <select id="p-type"><option>志愿项目</option><option>悬赏任务【任务】</option></select>
+      <section id="s-projects" class="pane" role="tabpanel" aria-label="项目库">
+        <h2 class="section-title">项目库 · 找到你的方向</h2>
+        <div class="filters" id="filters" role="group" aria-label="领域筛选"></div>
+        <div id="project-grid" class="grid"></div>
+      </section>
+
+      <section id="s-rewards" class="pane" role="tabpanel" aria-label="权益商店">
+        <h2 class="section-title">权益商店 · 颗粒归仓</h2>
+        <p class="muted shop-note">时数是本体，米粒是记法；兑换的是<b>券与权益</b>，商品由合作商户以人民币标价、结算。</p>
+        <div id="reward-grid" class="grid"></div>
+      </section>
+
+      <section id="s-me" class="pane" role="tabpanel" aria-label="我的">
+        <h2 class="section-title">我的 · 志愿档案</h2>
+        <div class="layout-2col">
+          <div>
+            <div class="card me-summary">
+              <div class="me-num"><span id="balance-main">2,340</span><small>米粒（粒）</small></div>
+              <div class="me-equiv">≈ <b id="hours-main">23.4</b> 小时认证时数<br><span class="muted">1 小时 = 100 粒 · 与志愿北京时数对标</span></div>
+              <div class="me-sub">
+                <div><strong>46.5 h</strong><span>累计服务</span></div>
+                <div><strong>12</strong><span>参与项目</span></div>
+                <div><strong>3</strong><span>点亮徽章</span></div>
+              </div>
+            </div>
+            <h3 class="card-title">时数账本（链上存证）</h3>
+            <div id="ledger" class="ledger"></div>
+          </div>
+          <aside class="sidebar">
+            <div class="card">
+              <h3 class="card-title">荣誉徽章</h3>
+              <div class="badges" id="badges"></div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">我的券包</h3>
+              <div id="voucher-list"></div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">志愿北京 · 录入直通车</h3>
+              <p class="muted">学号 <b>2023xxxxxx</b> 已绑定志愿北京账号，服务记录确认后批量录入（通常 &lt; 7 天）。</p>
+              <div class="sync-bar"><span style="width:90%"></span></div>
+              <p class="muted">已同步 42h / 46.5h</p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">钱包绑定</h3>
+              <p class="muted" id="wallet-state">默认托管钱包（学号即账户）。可绑定自有钱包用于查看链上存证。</p>
+              <button class="btn btn--tinted" id="wallet-btn-2"><i class="ri-wallet-3-fill" aria-hidden="true"></i>绑定自有钱包</button>
+            </div>
+          </aside>
         </div>
-        <div class="form-row">
-          <label for="p-title">标题</label>
-          <input id="p-title" required placeholder="例：电脑义诊 · 教工社区站">
-        </div>
-        <div class="form-row">
-          <label for="p-field">领域</label>
-          <select id="p-field"><option>支教</option><option>环保</option><option>助老</option><option>赛会</option><option>技能</option><option>乡村</option></select>
-        </div>
-        <div class="form-row">
-          <label for="p-slots">岗位数 / 单人时长</label>
-          <input id="p-slots" type="number" value="8" min="1" style="width:90px"> <span class="muted">个 /</span>
-          <input id="p-hours" type="number" value="4" min="1" style="width:70px"> <span class="muted">小时</span>
-        </div>
-        <div class="form-row">
-          <label for="p-ratio">米粒系数</label>
-          <select id="p-ratio"><option value="1">普通 1.0（100 粒/时）</option><option value="1.5">技能型 1.5</option><option value="2">艰苦偏远 2.0</option></select>
-          <span class="muted">预估发放：<b id="p-preview">800</b> 粒/人</span>
-        </div>
-        <div class="form-row">
-          <label class="check"><input type="checkbox" checked> 同步至志愿北京建项（录入直通车）</label>
-        </div>
-        <button class="btn" type="submit">提交审核（演示）</button>
-      </form>
-    </section>
+      </section>
+    </div>
+
+    <!-- ==================== 发布端 ==================== -->
+    <div id="role-publisher" hidden>
+      <nav class="tabs" role="tablist" aria-label="发布端导航">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-ptab="p-publish"><i class="ri-add-circle-fill" aria-hidden="true"></i>发布台</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-ptab="p-manage"><i class="ri-file-list-3-fill" aria-hidden="true"></i>项目管理</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-ptab="p-issue"><i class="ri-hand-heart-fill" aria-hidden="true"></i>发放台</button>
+      </nav>
+
+      <section id="p-publish" class="pane active" role="tabpanel" aria-label="发布台">
+        <h2 class="section-title">发布台 · 节点工作台</h2>
+        <p class="muted shop-note">发布即同步志愿北京建项；服务确认后一键发放 <b>RUCOIN = 时数认证入账</b>。</p>
+        <form class="card form" id="publish-form">
+          <div class="form-row">
+            <label for="p-type">类型</label>
+            <select id="p-type"><option>志愿项目</option><option>悬赏任务</option></select>
+          </div>
+          <div class="form-row">
+            <label for="p-title">标题</label>
+            <input id="p-title" required placeholder="例：电脑义诊 · 教工社区站">
+          </div>
+          <div class="form-row">
+            <label for="p-field">领域</label>
+            <select id="p-field"><option>支教</option><option>环保</option><option>助老</option><option>赛会</option><option>技能</option><option>乡村</option></select>
+          </div>
+          <div class="form-row">
+            <label for="p-place">地点 / 时间</label>
+            <input id="p-place" placeholder="校内 · 教工社区" style="flex:0 1 220px">
+            <input id="p-time" placeholder="10.26 周六 14:00" style="flex:0 1 180px">
+          </div>
+          <div class="form-row">
+            <label for="p-slots">岗位数 / 单人时长</label>
+            <input id="p-slots" type="number" value="8" min="1" style="width:90px"> <span class="muted">个 /</span>
+            <input id="p-hours" type="number" value="4" min="1" style="width:70px"> <span class="muted">小时</span>
+          </div>
+          <div class="form-row">
+            <label for="p-ratio">难度系数</label>
+            <select id="p-ratio"><option value="1">普通 1.0</option><option value="1.5">技能型 1.5</option><option value="2">艰苦偏远 2.0</option></select>
+            <span class="muted">每人发放：<b id="p-preview">800</b> 粒 = <b id="p-preview-h">8.0</b> 小时</span>
+          </div>
+          <div class="form-row">
+            <label class="check"><input type="checkbox" checked> 同步至志愿北京建项</label>
+          </div>
+          <button class="btn btn--filled" type="submit"><i class="ri-send-plane-line" aria-hidden="true"></i>发布（演示）</button>
+        </form>
+      </section>
+
+      <section id="p-manage" class="pane" role="tabpanel" aria-label="项目管理">
+        <h2 class="section-title">项目管理 · 报名与确认</h2>
+        <div id="manage-list"></div>
+      </section>
+
+      <section id="p-issue" class="pane" role="tabpanel" aria-label="发放台">
+        <h2 class="section-title">发放台 · 时数认证</h2>
+        <p class="muted shop-note">确认服务记录 → 发放 RUCOIN（= 时数入账）→ 链上存证 → 志愿北京批量录入。一次点击，四步完成。</p>
+        <div id="issue-list"></div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
-    <p><b>RUCDAO</b> · 让每一次志愿服务都被看见、被记录、有回响 · 发起：人民大学信息学院志愿服务部</p>
-    <p class="muted">合规声明：米粒（RUCOIN）为志愿服务贡献凭证，不可转让、不可兑换法定货币；志愿时长仅按真实服务在「志愿北京」如实记录。v0 原型 · <a href="https://github.com/Fishman-free/RUCDAO">GitHub</a></p>
+    <p><b>RUCDAO</b> · PoV（Proof of Volunteer）—— 让每一次志愿服务都被看见、被记录、有回响 · 发起：人民大学信息学院志愿服务部</p>
+    <p class="muted">RUCOIN 是志愿服务贡献凭证与志愿时数的认证方式：不与人民币挂钩、不可转让、不可兑换法定货币。v0.2 原型 · <a href="https://github.com/Fishman-free/RUCDAO">GitHub</a></p>
   </footer>
 
   <div id="toast" role="status" aria-live="polite"></div>
