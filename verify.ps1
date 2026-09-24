@@ -26,6 +26,7 @@ Check 'dual-role panes + issue flow' (($html -match 'id="role-student"') -and ($
 Check 'auth: campus email verification (@ruc.edu.cn + code)' (($html -match 'id="auth-view"') -and ($js -match 'ruc\.edu\.cn') -and ($html -match 'id="r-send"') -and ($html -match 'id="r-code"'))
 Check 'publisher certification gate (cert required to publish)' (($html -match 'id="cert-card"') -and ($html -match 'id="cert-form"') -and ($js -match '\u8ba4\u8bc1') -and ($js -match 'cert !== 2'))
 Check 'RUC identity (seal + motto + university)' (($html -match '\u5b9e\u4e8b\u6c42\u662f') -and ($html -match 'class="seal') -and ($html -match '\u4e2d\u56fd\u4eba\u6c11\u5927\u5b66'))
+Check 'theme toggle reachable from auth screen' (($html -match 'id="auth-theme-btn"') -and ($js -match 'auth-theme-btn') -and ($css -match 'auth-theme'))
 Check 'publish flow: position pricing (project-team set per role)' (($html -match 'id="pos-list"') -and ($js -match 'pos-row') -and ($js -match '\u804c\u4f4d\u5b9a\u4ef7'))
 Check 'rewards: campus institution network (canteen etc.)' (($html -match 'id="inst-list"') -and ($js -match '\u5927\u4f19\u98df\u5802'))
 Check 'no peer-review metering in product copy' (-not (($html + $js) -match '\u4e92\u8bc4\u5b9a\u4ef7|\u4e92\u8bc4\u8bb0\u5f55'))

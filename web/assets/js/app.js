@@ -340,15 +340,19 @@
   }
   function syncThemeIcon() {
     var dark = document.documentElement.getAttribute("data-theme") === "dark";
-    $("#theme-btn").innerHTML = '<i class="ri-' + (dark ? "sun-fill" : "moon-fill") + '" aria-hidden="true"></i>';
+    var icon = '<i class="ri-' + (dark ? "sun-fill" : "moon-fill") + '" aria-hidden="true"></i>';
+    $("#theme-btn").innerHTML = icon;
+    $("#auth-theme-btn").innerHTML = icon;
   }
-  $("#theme-btn").addEventListener("click", function () {
+  function toggleTheme() {
     var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("rucdao-theme", next);
     syncThemeIcon();
     toast(next === "dark" ? "已切换深色模式" : "已切换浅色模式");
-  });
+  }
+  $("#theme-btn").addEventListener("click", toggleTheme);
+  $("#auth-theme-btn").addEventListener("click", toggleTheme);
 
   // ---------------- 交互 ----------------
   document.querySelectorAll(".seg-btn").forEach(function (b) {
