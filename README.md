@@ -48,16 +48,17 @@ RUCDAO/
 ### 第 1 步：拿到代码
 
 ```powershell
+cd C:\Users\21560\Desktop
 git clone https://github.com/Fishman-free/RUCDAO.git
-cd RUCDAO
+cd C:\Users\21560\Desktop\RUCDAO
 ```
 
-**看到目录里有 `docs`、`web`、`contracts`、`verify.ps1` 就成功了。** 后面第 2 步之外的命令都在这个 RUCDAO 目录里执行。
+**看到目录里有 `docs`、`web`、`contracts`、`verify.ps1` 就成功了。** 以下命令均使用绝对路径，在其他电脑上操作时把 `C:\Users\21560` 替换为自己的用户目录即可。
 
 ### 第 2 步：启动原型（只想看界面，到这步为止）
 
 ```powershell
-cd web
+cd C:\Users\21560\Desktop\RUCDAO\web
 python -m http.server 8340
 ```
 
@@ -78,7 +79,7 @@ python -m http.server 8340
 **新开一个 PowerShell 窗口**（第 2 步那个窗口被服务器占着），进仓库根目录：
 
 ```powershell
-cd RUCDAO
+cd C:\Users\21560\Desktop\RUCDAO
 npm test
 ```
 
@@ -87,7 +88,7 @@ npm test
 ### 第 4 步：编译合约（可选）
 
 ```powershell
-cd contracts
+cd C:\Users\21560\Desktop\RUCDAO\contracts
 npm install        # 装 Solidity 编译器，首次约 1 分钟
 npm run compile
 ```
