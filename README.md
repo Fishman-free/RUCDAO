@@ -45,20 +45,28 @@ RUCDAO/
 | Python 3 | 给原型起本地服务 | <https://www.python.org/downloads/> | `python --version` |
 | Node.js 18+ | 跑验证、编译合约 | <https://nodejs.org> | `node --version` |
 
-### 第 1 步：拿到代码
+### 第 1 步：认清"你的"路径，拿到代码
+
+每个人的电脑路径不一样（用户名不一定是别人写的那个），所以先花一分钟认清自己的：
+
+1. 开始菜单搜索 **PowerShell**，打开它；
+2. 输入 `pwd` 回车——屏幕会显示你当前所在的位置，例如 `C:\Users\zhangsan`，这一段就是**你的用户目录**。别人电脑上的路径与你无关，以你屏幕上显示的为准；
+3. PowerShell 里 **`~` 就代表这个目录**：写 `~\RUCDAO` 就等于写 `C:\Users\zhangsan\RUCDAO`。所以后面所有命令你**直接照抄**即可，`~` 会自动指向你自己的目录。
 
 ```powershell
-cd C:\Users\21560\Desktop
+cd ~
 git clone https://github.com/Fishman-free/RUCDAO.git
-cd C:\Users\21560\Desktop\RUCDAO
+cd ~\RUCDAO
+pwd    # 自查：应显示 C:\Users\<你的用户名>\RUCDAO
+dir    # 自查：应看到 docs、web、contracts、verify.ps1
 ```
 
-**看到目录里有 `docs`、`web`、`contracts`、`verify.ps1` 就成功了。** 以下命令均使用绝对路径，在其他电脑上操作时把 `C:\Users\21560` 替换为自己的用户目录即可。
+（想把代码放在别处，比如 `D:\code`：先 `cd D:\code` 再 clone，之后把命令里的 `~\RUCDAO` 全部换成 `D:\code\RUCDAO`。）
 
 ### 第 2 步：启动原型（只想看界面，到这步为止）
 
 ```powershell
-cd C:\Users\21560\Desktop\RUCDAO\web
+cd ~\RUCDAO\web
 python -m http.server 8340
 ```
 
@@ -79,7 +87,7 @@ python -m http.server 8340
 **新开一个 PowerShell 窗口**（第 2 步那个窗口被服务器占着），进仓库根目录：
 
 ```powershell
-cd C:\Users\21560\Desktop\RUCDAO
+cd ~\RUCDAO
 npm test
 ```
 
@@ -88,7 +96,7 @@ npm test
 ### 第 4 步：编译合约（可选）
 
 ```powershell
-cd C:\Users\21560\Desktop\RUCDAO\contracts
+cd ~\RUCDAO\contracts
 npm install        # 装 Solidity 编译器，首次约 1 分钟
 npm run compile
 ```
