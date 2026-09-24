@@ -31,27 +31,74 @@ RUCDAO/
     └── assets/{css,js}/
 ```
 
-## 快速开始（v0.2）
+## 快速开始（保姆级 · 5 分钟跑起来）
+
+面向第一次拿到代码的同学。以下命令都在 **PowerShell**（Windows）里执行；用 Mac/Linux 则在终端执行，命令相同。
+
+### 第 0 步：准备环境（装过可跳过）
+
+需要三样东西。装完后各敲一条命令，**能打印出版本号就算装好**（报"'xxx'不是内部或外部命令"就是没装，或装完没重开 PowerShell）：
+
+| 工具 | 用途 | 下载 | 确认装好的命令 |
+|---|---|---|---|
+| Git | 拉代码 | <https://git-scm.com/download/win> | `git --version` |
+| Python 3 | 给原型起本地服务 | <https://www.python.org/downloads/> | `python --version` |
+| Node.js 18+ | 跑验证、编译合约 | <https://nodejs.org> | `node --version` |
+
+### 第 1 步：拿到代码
+
+```powershell
+git clone https://github.com/Fishman-free/RUCDAO.git
+cd RUCDAO
+```
+
+**看到目录里有 `docs`、`web`、`contracts`、`verify.ps1` 就成功了。** 后面第 2 步之外的命令都在这个 RUCDAO 目录里执行。
+
+### 第 2 步：启动原型（只想看界面，到这步为止）
 
 ```powershell
 cd web
 python -m http.server 8340
-# 浏览器打开 http://localhost:8340 —— 无需构建、无外部依赖
 ```
 
-合约编译（可选）：
+**看到 `Serving HTTP on :: port 8340` 就成功了。** 注意：这个窗口会停住不动——**这是正常的**，它就是服务器本身，别关它、也别以为卡死了。
+
+然后用浏览器打开 **<http://localhost:8340>**，应该看到 RUCDAO 首页（PoV 大标题 + 任务卡片流）。
+
+- 页面左上角切换「学生端 / 发布端」，右上角圆形按钮切换深浅色；
+- 想停服务器：回到那个窗口按 **Ctrl + C**。
+
+> **卡点自救**
+> - 报 `python 不是内部或外部命令` → 换 `py -m http.server 8340` 再试；还不行就是 Python 没装（回第 0 步）。
+> - 报 `Address already in use` / 端口被占 → 换个端口：`python -m http.server 8400`，浏览器地址也换成 `:8400`。
+> - 浏览器打不开 / 空白 → 先确认服务器窗口那行 `Serving HTTP...` 在，再看地址是不是 `http://localhost:8340`（不是 https）。
+
+### 第 3 步：跑全量验证（可选，动代码前建议跑一次）
+
+**新开一个 PowerShell 窗口**（第 2 步那个窗口被服务器占着），进仓库根目录：
+
+```powershell
+cd RUCDAO
+npm test
+```
+
+**看到 `verify summary: 16 passed, 0 failed` 就全绿了**（覆盖：JS 语法 / 双端流程 / 职位定价 / 受理网络 / 禁词 / 合约编译 / HTTP 冒烟）。退出码 = 失败数，0 就是全过。不想用 npm 也可以直接跑：`powershell -ExecutionPolicy Bypass -File verify.ps1`。
+
+### 第 4 步：编译合约（可选）
 
 ```powershell
 cd contracts
-npm install          # 安装 solc
-npm run compile      # solcjs 编译 RuCoin.sol
+npm install        # 装 Solidity 编译器，首次约 1 分钟
+npm run compile
 ```
 
-全量验证（语法 / 双端 / 面板作用域 / 设计 token / 图标 / 禁词 / 合约 / HTTP 冒烟）：
+**看到 `contracts/build/` 下生成 `.abi` 和 `.bin` 文件就成功了。**
 
-```powershell
-powershell -ExecutionPolicy Bypass -File verify.ps1   # 退出码 = 失败数
-```
+### 30 秒玩法导览
+
+1. 学生端「广场」→ 任选卡片点"接单 / 报名"，去「我的」看时数账本入账；
+2. 「权益商店」→ 兑一张"后勤面包券"，生成一次性核销码（限本人 · 当日有效）；
+3. 切「发布端」→ 「发布台」用**职位定价表**发布项目（添加职位 → 逐职位定米粒）→ 切「发放台」点"发放 + 上链存证"，再切回学生端看余额入账——这就是一条完整的"发布 → 参与 → 时数认证"链路。
 
 ## 合规声明
 
