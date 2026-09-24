@@ -91,7 +91,7 @@
     { name: "赵麦",   project: "【任务】市集海报设计",  position: "平面设计",   price: 450 }
   ];
 
-  var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {} };
+  var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {}, user: null, sentCode: null, certApplying: false };
 
   // ---------------- 工具 ----------------
   function $(sel) { return document.querySelector(sel); }
@@ -205,6 +205,70 @@
     }).join("");
   }
 
+  // ---------------- 账号：校内邮箱认证 + 发布者认证 ----------------
+  function validEmail(v) { return /^[^@\s]+@ruc\.edu\.cn$/i.test((v || "").trim()); }
+  function showAuth() { $("#auth-view").hidden = false; }
+  function hideAuth() { $("#auth-view").hidden = true; }
+  function requireLogin(msg) {
+    if (state.user) return true;
+    showAuth();
+    toast(msg || "请先登录：校内邮箱一键认证。");
+    return false;
+  }
+  function loginAs(u) {
+    state.user = u;
+    hideAuth();
+    $("#account-label").textContent = u.sid;
+    renderAccount(); renderCert();
+    toast("欢迎，" + u.email.split("@")[0] + " ✓ 校内邮箱认证通过。");
+  }
+  function logout() {
+    state.user = null; state.certApplying = false;
+    $("#account-label").textContent = "登录";
+    renderAccount(); renderCert();
+    showAuth();
+    toast("已退出登录。");
+  }
+  function renderAccount() {
+    var el = $("#me-account");
+    if (!state.user) {
+      el.innerHTML = '<p class="muted">未登录。注册与登录仅限校内邮箱（@ruc.edu.cn）。</p><button class="btn btn--tinted" data-open-auth>登录 / 注册</button>';
+      return;
+    }
+    var u = state.user;
+    var cert = u.cert === 2 ? "已认证" : u.cert === 1 ? "认证中" : "未认证";
+    el.innerHTML =
+      '<p class="acc-row"><span>校内邮箱</span><b>' + esc(u.email) + '</b></p>' +
+      '<p class="acc-row"><span>学号 / 工号</span><b>' + esc(u.sid) + '</b></p>' +
+      '<p class="acc-row"><span>发布者认证</span><b>' + cert + (u.cert === 2 ? ' · ' + esc(u.org) : '') + '</b></p>' +
+      '<button class="btn btn--plain" data-logout>退出登录</button>';
+  }
+  function renderCert() {
+    var el = $("#cert-body");
+    if (!el) return;
+    var form = $("#cert-form");
+    var u = state.user;
+    if (!u) {
+      form.hidden = true;
+      el.innerHTML = '<p class="muted">只有实名认证的志愿组织可以发布项目。请先登录（校内邮箱）。</p>';
+      return;
+    }
+    if (u.cert === 2) {
+      form.hidden = true;
+      el.innerHTML = '<p class="cert-ok"><i class="ri-verified-badge-fill" aria-hidden="true"></i>已认证 · ' + esc(u.org) + ' · ' + esc(u.job) + '</p>' +
+        '<p class="muted">认证编号 RUC-DA-' + esc(u.sid) + '（演示）· 你发布的项目将标注认证组织。</p>';
+      return;
+    }
+    if (u.cert === 1) {
+      form.hidden = true;
+      el.innerHTML = '<p class="muted">认证中……校团委备案复核（演示：稍候自动通过）。</p>';
+      return;
+    }
+    el.innerHTML = '<p class="muted">只有实名认证的志愿组织（校志协、院系志协、社团、项目组）可以发布志愿项目，认证在校团委备案。</p>' +
+      '<button type="button" class="btn btn--tinted" data-cert-start' + (state.certApplying ? ' hidden' : '') + '>申请发布者认证</button>';
+    form.hidden = !state.certApplying;
+  }
+
   // ---------------- 渲染：发布端 ----------------
   function renderManage() {
     $("#manage-list").innerHTML = myProjects.map(function (p, i) {
@@ -299,13 +363,40 @@
       var g = document.querySelector('[data-stab="' + t.dataset.goto + '"]');
       if (g) g.click();
     }
+    if (t.id === "account-btn") {
+      if (state.user) { var g2 = document.querySelector('[data-stab="s-me"]'); if (g2) g2.click(); }
+      else showAuth();
+    }
+    if (t.id === "auth-skip") loginAs({ email: "demo@ruc.edu.cn", sid: "2023xxxxxx", cert: 2, org: "信息学院志愿服务部", job: "演示管理员" });
+    if (t.hasAttribute("data-open-auth")) showAuth();
+    if (t.hasAttribute("data-logout")) logout();
+    if (t.hasAttribute("data-cert-start")) { state.certApplying = true; renderCert(); }
+    if (t.dataset.authtab) {
+      document.querySelectorAll("[data-authtab]").forEach(function (x) {
+        var on = x === t;
+        x.classList.toggle("active", on);
+        x.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      $("#login-form").hidden = t.dataset.authtab !== "login";
+      $("#reg-form").hidden = t.dataset.authtab !== "register";
+    }
+    if (t.id === "r-send") {
+      if (!validEmail($("#r-email").value)) { toast("仅限校内邮箱（@ruc.edu.cn）注册。"); return; }
+      state.sentCode = String(Math.floor(100000 + Math.random() * 900000));
+      toast("演示验证码：" + state.sentCode + "（正式版将发送至该邮箱）");
+    }
     if (t.dataset.filter) { state.filter = t.dataset.filter; renderFilters(); renderProjects(); }
     if (t.dataset.join !== undefined && !state.joined[t.dataset.join]) {
+      if (!requireLogin()) return;
       state.joined[t.dataset.join] = true; renderProjects();
       toast("报名成功 ✓ 服务确认后时数自动认证入账。");
     }
-    if (t.dataset.joinFeed !== undefined) { toast("已接单 ✓ 完成后提交交付物，验收通过即认证时数。"); }
+    if (t.dataset.joinFeed !== undefined) {
+      if (!requireLogin()) return;
+      toast("已接单 ✓ 完成后提交交付物，验收通过即认证时数。");
+    }
     if (t.dataset.buy !== undefined && !state.redeemed[t.dataset.buy]) {
+      if (!requireLogin()) return;
       var r = rewards[+t.dataset.buy];
       if (state.balance < r.cost) { toast("米粒不足——去项目库接个项目攒时数吧。"); return; }
       state.redeemed[t.dataset.buy] = true;
@@ -321,12 +412,14 @@
       toast(msg);
     }
     if (t.dataset.confirm !== undefined) {
+      if (!requireLogin()) return;
       var p = myProjects[+t.dataset.confirm];
       p.confirmed = p.joined;
       renderManage();
       toast("服务记录已确认 ✓ 切到「发放台」一键发放时数。");
     }
     if (t.dataset.issue !== undefined && !state.issued[t.dataset.issue]) {
+      if (!requireLogin()) return;
       var rec = issueList[+t.dataset.issue];
       var amt = rec.price;
       state.issued[t.dataset.issue] = true;
@@ -335,7 +428,7 @@
       renderIssues(); updateBalance(); renderLedger();
       toast("已发放 " + fmt(amt) + " 粒（= " + toHours(amt) + " 小时认证时数）· 链上存证 + 志愿北京批量录入中。");
     }
-    if (t.id === "wallet-btn" || t.id === "wallet-btn-2") { connectWallet(); }
+    if (t.id === "wallet-btn-2") { connectWallet(); }
   });
 
   async function connectWallet() {
@@ -345,7 +438,7 @@
         var msg = "RUCDAO 钱包绑定（测试网演示）\n学号: 2023xxxxxx\n地址: " + accts[0];
         await window.ethereum.request({ method: "personal_sign", params: [msg, accts[0]] });
         var short = accts[0].slice(0, 6) + "…" + accts[0].slice(-4);
-        $("#wallet-btn").innerHTML = '<i class="ri-wallet-3-fill" aria-hidden="true"></i>' + short;
+        $("#wallet-btn-2").innerHTML = '<i class="ri-wallet-3-fill" aria-hidden="true"></i>' + short;
         $("#wallet-state").innerHTML = "已绑定自有钱包 <b>" + short + "</b>（签名验证通过）。RUCOIN 对标时数，不可转账。";
         toast("钱包绑定成功 ✓ 签名已验证。");
       } catch (err) { toast("已取消绑定。托管钱包（学号即账户）继续可用。"); }
@@ -381,6 +474,13 @@
   $("#pos-add").addEventListener("click", function () { posRow(); });
   $("#publish-form").addEventListener("submit", function (e) {
     e.preventDefault();
+    if (!requireLogin("请先登录后再发布。")) return;
+    if (state.user.cert !== 2) {
+      state.certApplying = true; renderCert();
+      $("#cert-card").scrollIntoView({ behavior: "smooth", block: "center" });
+      toast("发布需先完成发布者认证（实名组织备案）。");
+      return;
+    }
     var positions = [];
     document.querySelectorAll(".pos-row").forEach(function (row) {
       var n = row.querySelector(".pos-name").value.trim() || "志愿者";
@@ -404,6 +504,38 @@
   bindTabs("data-stab"); bindTabs("data-ptab");
   renderFeed(); renderFilters(); renderProjects(); renderRewards();
   renderLedger(); renderBadges(); renderVouchers(); renderRank();
-  renderManage(); renderIssues(); renderInstitutions(); updateBalance(); posRow("志愿者", 4, 400);
-  console.log("RUCDAO v0.2 · 学生端/发布端 · PoV 志愿服务贡献证明 · RUCOIN = 时数认证（1 小时 = 100 粒）");
+  renderManage(); renderIssues(); renderInstitutions(); renderAccount(); renderCert(); updateBalance(); posRow("志愿者", 4, 400);
+  showAuth();
+  document.addEventListener("submit", function (e) {
+    var f = e.target;
+    if (f.id === "login-form") {
+      e.preventDefault();
+      if (!validEmail($("#l-email").value)) { toast("请使用校内邮箱（@ruc.edu.cn）。"); return; }
+      if (!$("#l-pass").value) { toast("请输入密码。"); return; }
+      loginAs({ email: $("#l-email").value.trim(), sid: "2023xxxxxx", cert: 0, org: "", job: "" });
+    }
+    if (f.id === "reg-form") {
+      e.preventDefault();
+      if (!validEmail($("#r-email").value)) { toast("仅限校内邮箱（@ruc.edu.cn）注册——一人一号。"); return; }
+      if (!state.sentCode || $("#r-code").value.trim() !== state.sentCode) { toast("验证码不正确，请先点「发送验证码」。"); return; }
+      if (!$("#r-sid").value.trim()) { toast("请填写学号 / 工号（实名制）。"); return; }
+      if (($("#r-pass").value || "").length < 6) { toast("密码至少 6 位。"); return; }
+      loginAs({ email: $("#r-email").value.trim(), sid: $("#r-sid").value.trim(), cert: 0, org: "", job: "" });
+    }
+    if (f.id === "cert-form") {
+      e.preventDefault();
+      var u = state.user;
+      u.org = $("#c-org").value.trim() || "志愿服务组织";
+      u.job = $("#c-job").value.trim() || "项目负责人";
+      u.cert = 1;
+      renderCert(); renderAccount();
+      toast("认证申请已提交 · 校团委备案复核中（演示）。");
+      setTimeout(function () {
+        if (!state.user) return;
+        state.user.cert = 2; renderCert(); renderAccount();
+        toast("发布者认证通过 ✓ 现在可以发布项目了。");
+      }, 1500);
+    }
+  });
+  console.log("RUCDAO v0.3 · 校内邮箱认证 + 发布者认证 · PoV 志愿服务贡献证明 · RUCOIN = 时数认证（1 小时 = 100 粒）");
 })();
