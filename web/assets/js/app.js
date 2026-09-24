@@ -1,5 +1,5 @@
 /* RUCDAO v0.2 — 学生端 / 发布端 双端原型（Apple Design System）
- * RUCOIN = 志愿时数认证：1 小时 = 100 粒，余额即时数账本。
+ * RUCOIN = 志愿时数认证：1 小时 = 10 粒，余额即时数账本。
  * 演示数据本地模拟；链上存证由 contracts/RuCoin.sol 承担。 */
 (function () {
   "use strict";
@@ -8,22 +8,22 @@
   var feed = [
     { type: "task", field: "技能", title: "校园开放日活动跟拍", node: "校团委新媒体中心",
       body: ["内容：全程记录校园开放日，产出精修图 20 张 + 1 分钟花絮。", "要求：有相机，按时交付，素材授权校方使用。"],
-      reward: 500, slots: 1 },
+      reward: 50, slots: 1 },
     { type: "task", field: "技能", title: "“我最难忘的一次志愿服务”图文征集", node: "信息学院志愿服务部",
       body: ["内容：千字以内图文一则，记录真实志愿故事。", "要求：原创，可在广场连载。"],
-      reward: 200, slots: 10 },
+      reward: 20, slots: 10 },
     { type: "proj", field: "乡村", title: "“科技走入乡村”龙潭村数字夏令营", node: "RUCDAO × 乡建DAO 联合节点",
-      body: ["岗位清单：授课 6 人（800 粒/人）、摄影 1 人（500 粒）、助教 2 人（600 粒）。", "多劳多得：额外产出需求文档另计 300 粒。"],
-      reward: 800, slots: 9 },
+      body: ["岗位清单：授课 6 人（80 粒/人）、摄影 1 人（50 粒）、助教 2 人（60 粒）。", "多劳多得：额外产出需求文档另计 30 粒。"],
+      reward: 80, slots: 9 },
     { type: "proj", field: "助老", title: "银龄数字课堂 · 教老人用智能手机", node: "青志协助老服务队",
-      body: ["每周六上午，社区党群服务中心。", "每期 2 小时 × 1.2 系数 = 240 粒/期，满 8 期点亮「银龄之友」徽章。"],
-      reward: 240, slots: 4 },
+      body: ["每周六上午，社区党群服务中心。", "每期 2 小时 = 24 粒/期（含技能加成），满 8 期点亮「银龄之友」徽章。"],
+      reward: 24, slots: 4 },
     { type: "task", field: "技能", title: "志愿市集摊位海报设计", node: "校志协宣传部",
       body: ["内容：A2 海报 1 张 + 朋友圈版式 1 套。", "要求：含 RUCDAO 米粒元素。"],
-      reward: 300, slots: 2 },
+      reward: 30, slots: 2 },
     { type: "proj", field: "技能", title: "共学共创工作坊 #04：AI 也能做志愿项目管理", node: "信息学院志愿服务部",
-      body: ["10 月 18 日 19:00，信息楼报告厅。", "米粒抵扣：报名费 50 粒（到场全额返还 + 赠 30 粒）。"],
-      reward: 30, slots: 60 }
+      body: ["10 月 18 日 19:00，信息楼报告厅。", "米粒抵扣：报名费 5 粒（到场全额返还 + 赠 3 粒）。"],
+      reward: 3, slots: 60 }
   ];
 
   var projects = [
@@ -38,15 +38,15 @@
   ];
 
   var rewards = [
-    { icon: "ri-coupon-fill",     title: "后勤面包券 · 1 张",   cost: 300,  note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
-    { icon: "ri-cup-fill",        title: "面包房咖啡券",        cost: 400,  note: "券源商户赞助 · 一次性核销", voucher: true },
-    { icon: "ri-restaurant-fill", title: "大伙食堂基本伙代金券 10 元", cost: 800, note: "大伙食堂（基本伙）· 一次性核销", voucher: true },
-    { icon: "ri-shopping-bag-fill", title: "校园超市代金券 5 元", cost: 450,  note: "校园超市 · 一次性核销", voucher: true },
-    { icon: "ri-printer-fill",    title: "打印券 50 页",        cost: 400,  note: "图书馆文印中心" },
-    { icon: "ri-gift-fill",       title: "RUCDAO 文创卫衣",     cost: 3000, note: "稻穗印章限定款 · 每学期 50 件" },
-    { icon: "ri-bus-2-fill",      title: "名企参访名额",        cost: 2500, note: "每学期 2 次 · 含车旅" },
-    { icon: "ri-seedling-fill",   title: "暑期乡村实践优先名额", cost: 3500, note: "龙潭村等共建村庄" },
-    { icon: "ri-award-fill",      title: "年度志愿之星奖杯 + 证书", cost: 5000, note: "校志协年会颁发 · 附荣誉徽章" }
+    { icon: "ri-coupon-fill",     title: "后勤面包券 · 1 张",   cost: 30,  note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
+    { icon: "ri-cup-fill",        title: "面包房咖啡券",        cost: 40,  note: "券源商户赞助 · 一次性核销", voucher: true },
+    { icon: "ri-restaurant-fill", title: "大伙食堂基本伙代金券 10 元", cost: 80, note: "大伙食堂（基本伙）· 一次性核销", voucher: true },
+    { icon: "ri-shopping-bag-fill", title: "校园超市代金券 5 元", cost: 45,  note: "校园超市 · 一次性核销", voucher: true },
+    { icon: "ri-printer-fill",    title: "打印券 50 页",        cost: 40,  note: "图书馆文印中心" },
+    { icon: "ri-gift-fill",       title: "RUCDAO 文创卫衣",     cost: 300, note: "稻穗印章限定款 · 每学期 50 件" },
+    { icon: "ri-bus-2-fill",      title: "名企参访名额",        cost: 250, note: "每学期 2 次 · 含车旅" },
+    { icon: "ri-seedling-fill",   title: "暑期乡村实践优先名额", cost: 350, note: "龙潭村等共建村庄" },
+    { icon: "ri-award-fill",      title: "年度志愿之星奖杯 + 证书", cost: 500, note: "校志协年会颁发 · 附荣誉徽章" }
   ];
 
   var institutions = [
@@ -58,12 +58,12 @@
   ];
 
   var ledger = [
-    { amt: 240,  txt: "银龄数字课堂 · 第 3 期（2h × 1.2）",   hash: "0x7a3f…c210 · recordService #R-0412" },
-    { amt: -50,  txt: "工作坊 #04 报名费抵扣",                hash: "0x15be…88aa · redeem #W-0007" },
-    { amt: 500,  txt: "新生报到跟拍验收通过",                  hash: "0x9d02…4f31 · award #T-0056" },
-    { amt: 600,  txt: "电脑义诊 · 教工社区站（4h × 1.5）",    hash: "0x3c81…b7e2 · recordService #R-0388" },
-    { amt: -300, txt: "兑换：后勤面包券",                     hash: "0x6af4…1d09 · redeem #C-0231" },
-    { amt: 300,  txt: "运动会海报设计赏金",                    hash: "0xbe07…77c4 · award #T-0049" }
+    { amt: 24,  txt: "银龄数字课堂 · 第 3 期（2h · 技能加成）", hash: "0x7a3f…c210 · recordService #R-0412" },
+    { amt: -5,  txt: "工作坊 #04 报名费抵扣",                hash: "0x15be…88aa · redeem #W-0007" },
+    { amt: 50,  txt: "新生报到跟拍验收通过",                  hash: "0x9d02…4f31 · award #T-0056" },
+    { amt: 60,  txt: "电脑义诊 · 教工社区站（职位定价）",    hash: "0x3c81…b7e2 · recordService #R-0388" },
+    { amt: -30, txt: "兑换：后勤面包券",                     hash: "0x6af4…1d09 · redeem #C-0231" },
+    { amt: 30,  txt: "运动会海报设计赏金",                    hash: "0xbe07…77c4 · award #T-0049" }
   ];
 
   var badges = [
@@ -78,25 +78,36 @@
 
   var myProjects = [
     { title: "电脑义诊 · 教工社区站", field: "技能", joined: 5, confirmed: 3,
-      positions: [{ name: "硬件维修员", slots: 5, price: 600 }, { name: "咨询引导员", slots: 3, price: 300 }] },
+      positions: [{ name: "硬件维修员", slots: 5, price: 60 }, { name: "咨询引导员", slots: 3, price: 30 }] },
     { title: "银龄数字课堂 · 第 5 期", field: "助老", joined: 4, confirmed: 0,
-      positions: [{ name: "授课志愿者", slots: 3, price: 240 }, { name: "助教", slots: 1, price: 180 }] },
+      positions: [{ name: "授课志愿者", slots: 3, price: 24 }, { name: "助教", slots: 1, price: 18 }] },
     { title: "【任务】市集海报设计", field: "技能", joined: 2, confirmed: 1,
-      positions: [{ name: "平面设计", slots: 2, price: 450 }] }
+      positions: [{ name: "平面设计", slots: 2, price: 45 }] }
   ];
 
   var issueList = [
-    { name: "王小禾", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 600 },
-    { name: "林一舟", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 600 },
-    { name: "赵麦",   project: "【任务】市集海报设计",  position: "平面设计",   price: 450 }
+    { name: "王小禾", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 60 },
+    { name: "林一舟", project: "电脑义诊 · 教工社区站", position: "硬件维修员", price: 60 },
+    { name: "赵麦",   project: "【任务】市集海报设计",  position: "平面设计",   price: 45 }
   ];
 
-  var state = { balance: 2340, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {}, user: null, sentCode: null, certApplying: false };
+  var serviceRecords = [
+    { project: "银龄数字课堂 · 第 3 期", position: "授课志愿者", date: "10.05", hours: 2, status: "ok" },
+    { project: "电脑义诊 · 教工社区站", position: "硬件维修员", date: "09.28", hours: 4, status: "ok" },
+    { project: "新生报到跟拍", position: "摄影", date: "09.05", hours: 5, status: "ok" },
+    { project: "市集海报设计", position: "平面设计", date: "10.10", hours: 3, status: "ok" },
+    { project: "垃圾分类督导", position: "引导员", date: "10.16", hours: 2, status: "ing" },
+    { project: "校运会赛事引导", position: "引导员", date: "10.31", hours: 8, status: "miss" },
+    { project: "古籍数字化助理", position: "录入员", date: "10.09", hours: 3, status: "ok" },
+    { project: "共学共创工作坊 #04", position: "志愿讲师", date: "10.18", hours: 1, status: "ok" }
+  ];
+
+  var state = { balance: 234, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {}, user: null, sentCode: null, certApplying: false };
 
   // ---------------- 工具 ----------------
   function $(sel) { return document.querySelector(sel); }
   function fmt(n) { return n.toLocaleString("en-US"); }
-  function toHours(mili) { return (mili / 100).toFixed(1); }
+  function toHours(g) { return (g / 10).toFixed(1); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
   function toast(msg) {
     var t = $("#toast");
@@ -108,8 +119,12 @@
   function updateBalance() {
     $("#balance-quick").textContent = fmt(state.balance);
     $("#balance-main").textContent = fmt(state.balance);
+    var bw = $("#balance-wallet");
+    if (bw) bw.textContent = fmt(state.balance);
     $("#hours-quick").textContent = toHours(state.balance);
     $("#hours-main").textContent = toHours(state.balance);
+    var hw = $("#hours-wallet");
+    if (hw) hw.textContent = toHours(state.balance);
   }
 
   // ---------------- 渲染：学生端 ----------------
@@ -139,7 +154,7 @@
     $("#project-grid").innerHTML = list.map(function (p) {
       var idx = projects.indexOf(p);
       var joined = state.joined[idx];
-      var reward = Math.round(p.hours * 100 * p.ratio);
+      var reward = Math.round(p.hours * 10 * p.ratio);
       return '<article class="card proj-card">' +
         '<span class="tag ' + esc(p.field) + '">' + esc(p.field) + '</span>' +
         '<h3>' + esc(p.title) + '</h3>' +
@@ -166,10 +181,7 @@
   }
 
   function renderLedger() {
-    $("#ledger").innerHTML = ledger.map(function (l) {
-      return '<div class="ledger-row"><span>' + esc(l.txt) + '<span class="ledger-hash">' + esc(l.hash) + '</span></span>' +
-        '<span class="ledger-amt ' + (l.amt > 0 ? "plus" : "minus") + '">' + (l.amt > 0 ? "+" : "") + fmt(l.amt) + ' 粒</span></div>';
-    }).join("");
+    renderLedgers();
   }
 
   function renderBadges() {
@@ -197,6 +209,38 @@
     el.innerHTML = institutions.map(function (it) {
       return '<span class="inst-chip"><b>' + esc(it.name) + '</b>' + esc(it.items) + '<i>' + esc(it.status) + '</i></span>';
     }).join("");
+  }
+
+  function renderAudit() {
+    var el = $("#audit-list");
+    var sum = $("#audit-sum");
+    if (!el || !sum) return;
+    var totalH = 0, okH = 0;
+    var rows = serviceRecords.map(function (r) {
+      totalH += r.hours;
+      if (r.status === "ok") okH += r.hours;
+      var st = r.status === "ok" ? '<span class="st st-ok">已认证</span>'
+        : r.status === "ing" ? '<span class="st st-ing">审核中</span>'
+        : '<span class="st st-miss">未申报</span>';
+      return '<div class="audit-row"><div><b>' + esc(r.project) + '</b><span class="muted">' + esc(r.date) + ' · ' + esc(r.position) + '</span></div>' +
+        '<span>' + r.hours + ' 小时</span><span>' + (r.hours * 10) + ' 粒</span><span>= ' + toHours(r.hours * 10) + ' h</span>' + st + '</div>';
+    }).join("");
+    sum.innerHTML =
+      '<div class="stat"><b>' + totalH + ' h</b><span>服务总时数</span></div>' +
+      '<div class="stat"><b>' + okH + ' h</b><span>已认证</span></div>' +
+      '<div class="stat"><b>' + (totalH - okH) + ' h</b><span>待认证</span></div>' +
+      '<div class="stat"><b>' + (okH * 10) + '</b><span>已入账米粒（1h = 10 粒）</span></div>';
+    el.innerHTML = '<div class="audit-row audit-head"><span>项目 / 职位</span><span>时数</span><span>米粒</span><span>换算核对</span><span>认证状态</span></div>' + rows;
+  }
+
+  function renderLedgers() {
+    var html = ledger.map(function (l) {
+      return '<div class="ledger-row"><span>' + esc(l.txt) + '<span class="ledger-hash">' + esc(l.hash) + '</span></span>' +
+        '<span class="ledger-amt ' + (l.amt > 0 ? "plus" : "minus") + '">' + (l.amt > 0 ? "+" : "") + fmt(l.amt) + ' 粒</span></div>';
+    }).join("");
+    $("#ledger").innerHTML = html;
+    var lw = $("#ledger-wallet");
+    if (lw) lw.innerHTML = html;
   }
 
   function renderRank() {
@@ -433,6 +477,8 @@
       toast("已发放 " + fmt(amt) + " 粒（= " + toHours(amt) + " 小时认证时数）· 链上存证 + 志愿北京批量录入中。");
     }
     if (t.id === "wallet-btn-2") { connectWallet(); }
+    if (t.id === "wallet-export") { toast("贡献证明已生成（演示）· 含服务明细、认证时数与链上存证编号。"); }
+    if (t.id === "audit-sync") { toast("对账完成（演示）· 服务 28h：已认证 18h，审核中 2h，未申报 8h——明细见上表。"); }
   });
 
   async function connectWallet() {
@@ -508,7 +554,7 @@
   bindTabs("data-stab"); bindTabs("data-ptab");
   renderFeed(); renderFilters(); renderProjects(); renderRewards();
   renderLedger(); renderBadges(); renderVouchers(); renderRank();
-  renderManage(); renderIssues(); renderInstitutions(); renderAccount(); renderCert(); updateBalance(); posRow("志愿者", 4, 400);
+  renderManage(); renderIssues(); renderInstitutions(); renderAccount(); renderCert(); renderAudit(); updateBalance(); posRow("志愿者", 4, 40);
   showAuth();
   document.addEventListener("submit", function (e) {
     var f = e.target;
@@ -541,5 +587,5 @@
       }, 1500);
     }
   });
-  console.log("RUCDAO v0.3 · 校内邮箱认证 + 发布者认证 · PoV 志愿服务贡献证明 · RUCOIN = 时数认证（1 小时 = 100 粒）");
+  console.log("RUCDAO v0.4 · 米粒钱包 + 时数核对 · PoV 志愿服务贡献证明 · RUCOIN = 时数认证（1 小时 = 10 粒）");
 })();

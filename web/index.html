@@ -104,6 +104,8 @@
         <button class="tab-btn active" role="tab" aria-selected="true" data-stab="s-plaza"><i class="ri-home-5-fill" aria-hidden="true"></i>广场</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-projects"><i class="ri-compass-3-fill" aria-hidden="true"></i>项目库</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-rewards"><i class="ri-shopping-bag-fill" aria-hidden="true"></i>权益商店</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-wallet"><i class="ri-wallet-3-fill" aria-hidden="true"></i>米粒钱包</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-audit"><i class="ri-shield-check-line" aria-hidden="true"></i>时数核对</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-stab="s-me"><i class="ri-user-fill" aria-hidden="true"></i>我的</button>
       </nav>
 
@@ -113,7 +115,7 @@
             <div class="hero">
               <p class="hero-kicker">中国人民大学 · 实事求是</p>
               <h1>把志愿服务，变成<br>可验证的贡献证明。</h1>
-              <p class="hero-sub"><b>RUCOIN 就是志愿时数的认证方式</b>——1 小时 = 100 粒，余额即认证时数账本。找项目、做志愿、时数入账、兑权益，在这里一气呵成。</p>
+              <p class="hero-sub"><b>RUCOIN 就是志愿时数的认证方式</b>——1 小时 = 10 粒，余额即认证时数账本。找项目、做志愿、时数入账、兑权益，在这里一气呵成。</p>
               <p class="hero-meta">PoV（Proof of Volunteer，志愿服务贡献证明）· RUCOIN 与人民币不挂钩、不可转让，兑换的是券与权益。</p>
             </div>
             <h2 class="section-title">PoV 怎么运转 · 四步</h2>
@@ -121,7 +123,7 @@
               <ol class="pov-steps">
                 <li><b>服务</b><span>报名项目、真实参与，负责人确认到岗与工时。</span></li>
                 <li><b>存证</b><span>服务记录核验后链上存证，志愿北京同步录入。</span></li>
-                <li><b>认证</b><span>RUCOIN 入账，1 小时 = 100 粒，余额即时数。</span></li>
+                <li><b>认证</b><span>RUCOIN 入账，1 小时 = 10 粒，余额即时数。</span></li>
                 <li><b>回响</b><span>兑面包券、周边、参访机会，也是提案投票权。</span></li>
               </ol>
             </div>
@@ -131,7 +133,7 @@
           <aside class="sidebar">
             <div class="card">
               <div class="hours-card-head"><i class="ri-verified-badge-fill" aria-hidden="true"></i><span>我的认证时数</span></div>
-              <p class="hours-num"><span id="balance-quick">2,340</span><small>粒 = <span id="hours-quick">23.4</span> 小时</small></p>
+              <p class="hours-num"><span id="balance-quick">234</span><small>粒 = <span id="hours-quick">23.4</span> 小时</small></p>
               <p class="muted">志愿北京已同步 42h · 记录可查可验</p>
               <button class="btn btn--plain" data-goto="s-me">查看账本 →</button>
             </div>
@@ -168,13 +170,41 @@
         <div id="reward-grid" class="grid"></div>
       </section>
 
+      <section id="s-wallet" class="pane" role="tabpanel" aria-label="米粒钱包">
+        <h2 class="section-title">米粒钱包 · RUCOIN 专用账户</h2>
+        <div class="card wallet-card">
+          <div class="hours-card-head"><i class="ri-wallet-3-fill" aria-hidden="true"></i><span>托管钱包 · 学号即账户</span></div>
+          <p class="wallet-balance"><span id="balance-wallet">234</span><small>粒 ≈ <span id="hours-wallet">23.4</span> 小时认证时数 · 1 小时 = 10 粒</small></p>
+          <p class="addr" id="wallet-addr">ruc:stu:2023xxxxxx · 链上账户 0x7a3f…c210 · 灵魂绑定（不可转让）</p>
+          <div class="mg-actions">
+            <button class="btn btn--filled" id="wallet-export"><i class="ri-download-line" aria-hidden="true"></i>导出贡献证明</button>
+            <button class="btn btn--tinted" id="wallet-btn-2"><i class="ri-wallet-3-fill" aria-hidden="true"></i>绑定自有钱包</button>
+          </div>
+          <p class="muted" id="wallet-state" style="margin-top:12px">默认托管钱包（学号即账户），无需记助记词。可绑定自有钱包用于查看链上存证。RUCOIN 不可转让、不与人民币挂钩。</p>
+        </div>
+        <h3 class="card-title">链上流水（存证）</h3>
+        <div id="ledger-wallet" class="ledger"></div>
+      </section>
+
+      <section id="s-audit" class="pane" role="tabpanel" aria-label="时数核对">
+        <h2 class="section-title">时数核对 · 志愿时数认证检查</h2>
+        <p class="muted shop-note">逐条对照服务记录与志愿北京，检查<b>每一小时志愿时数是否都已认证</b>。换算口径：<b>1 小时 = 10 粒</b>。</p>
+        <div class="card audit-sum" id="audit-sum"></div>
+        <div id="audit-list" class="audit-table"></div>
+        <div class="card">
+          <h3 class="card-title">与志愿北京对账</h3>
+          <p class="muted">志愿北京账号 <b>2023xxxxxx</b> · 最近同步 10.20 09:00（演示）。未认证与审核中的记录已在上表标出。</p>
+          <button class="btn btn--tinted" id="audit-sync"><i class="ri-refresh-line" aria-hidden="true"></i>一键核对志愿北京</button>
+        </div>
+      </section>
+
       <section id="s-me" class="pane" role="tabpanel" aria-label="我的">
         <h2 class="section-title">我的 · 志愿档案</h2>
         <div class="layout-2col">
           <div>
             <div class="card me-summary">
-              <div class="me-num"><span id="balance-main">2,340</span><small>米粒（粒）</small></div>
-              <div class="me-equiv">≈ <b id="hours-main">23.4</b> 小时认证时数<br><span class="muted">1 小时 = 100 粒 · 与志愿北京时数对标</span></div>
+              <div class="me-num"><span id="balance-main">234</span><small>米粒（粒）</small></div>
+              <div class="me-equiv">≈ <b id="hours-main">23.4</b> 小时认证时数<br><span class="muted">1 小时 = 10 粒 · 与志愿北京时数对标</span></div>
               <div class="me-sub">
                 <div><strong>46.5 h</strong><span>累计服务</span></div>
                 <div><strong>12</strong><span>参与项目</span></div>
@@ -203,11 +233,7 @@
               <div class="sync-bar"><span style="width:90%"></span></div>
               <p class="muted">已同步 42h / 46.5h</p>
             </div>
-            <div class="card">
-              <h3 class="card-title">钱包绑定</h3>
-              <p class="muted" id="wallet-state">默认托管钱包（学号即账户）。可绑定自有钱包用于查看链上存证。</p>
-              <button class="btn btn--tinted" id="wallet-btn-2"><i class="ri-wallet-3-fill" aria-hidden="true"></i>绑定自有钱包</button>
-            </div>
+
           </aside>
         </div>
       </section>
@@ -257,7 +283,7 @@
             <div class="pos-wrap">
               <div id="pos-list" class="pos-list"></div>
               <button type="button" class="btn btn--gray" id="pos-add"><i class="ri-add-line" aria-hidden="true"></i>添加职位</button>
-              <p class="muted">米粒数额由项目组按职位核定（参考基准：1 小时 = 100 粒，技能型、艰苦岗可上浮），报名前公示；服务确认后按定价发放，不设互评。成果不合格可减付并说明理由，志愿者可向仲裁委员会申诉。</p>
+              <p class="muted">米粒数额由项目组按职位核定（参考基准：<b>1 小时 = 10 粒</b>，技能型、艰苦岗可上浮），报名前公示；服务确认后按定价发放，不设互评。成果不合格可减付并说明理由，志愿者可向仲裁委员会申诉。</p>
             </div>
           </div>
           <div class="form-row">
@@ -288,6 +314,7 @@
     <p><b>RUCDAO</b> · PoV（Proof of Volunteer）—— 让每一次志愿服务都被看见、被记录、有回响 · 发起：人民大学信息学院志愿服务部</p>
     <p class="muted">RUCOIN 是志愿服务贡献凭证与志愿时数的认证方式：不与人民币挂钩、不可转让、不可兑换法定货币。v0.3 原型 · <a href="https://github.com/Fishman-free/RUCDAO">GitHub</a></p>
     <p class="footer-heritage">中国人民大学 · 一九三七 · 实事求是</p>
+    <p class="footer-links"><a href="https://www.ruc.edu.cn">人大主页</a>·<a href="https://my.ruc.edu.cn">数字人大</a>·<a href="https://www.bv2008.cn">志愿北京</a></p>
   </footer>
 
   <div id="toast" role="status" aria-live="polite"></div>

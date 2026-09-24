@@ -30,7 +30,7 @@ Check 'theme toggle reachable from auth screen' (($html -match 'id="auth-theme-b
 Check 'publish flow: position pricing (project-team set per role)' (($html -match 'id="pos-list"') -and ($js -match 'pos-row') -and ($js -match '\u804c\u4f4d\u5b9a\u4ef7'))
 Check 'rewards: campus institution network (canteen etc.)' (($html -match 'id="inst-list"') -and ($js -match '\u5927\u4f19\u98df\u5802'))
 Check 'no peer-review metering in product copy' (-not (($html + $js) -match '\u4e92\u8bc4\u5b9a\u4ef7|\u4e92\u8bc4\u8bb0\u5f55'))
-Check 'Apple tokens (font/grid/radius/spring/glass/dark/reduced-motion/RUC-red)' (($css -match 'SF Pro') -and ($css -match '--space-xs: 4px') -and ($css -match '--radius-lg: 16px') -and ($css -match 'cubic-bezier\(0\.34, 1\.56') -and ($css -match 'backdrop-filter: saturate\(180%\) blur') -and ($css -match '\[data-theme="dark"\]') -and ($css -match 'prefers-reduced-motion') -and ($css -match '--accent: #8C2229'))
+Check 'design tokens (paper palette + small radius + serif + dual-mode + RUC-red)' (($css -match '#FCF7F0') -and ($css -match '--radius-lg: 6px') -and ($css -match '--font-serif') -and ($css -match 'cubic-bezier\(0\.34, 1\.56') -and ($css -match 'forced-color-adjust: none') -and ($css -match '\[data-theme="dark"\]') -and ($css -match 'prefers-reduced-motion') -and ($css -match '--accent: #8C2229'))
 
 $iconCss = Get-Content "$root\web\assets\icons\remixicon.css" -Raw
 $used = [regex]::Matches(($html + $js), 'ri-([a-z0-9-]+)') | ForEach-Object { $_.Value } | Sort-Object -Unique
@@ -46,7 +46,9 @@ foreach ($pair in @(@('index.html', $html), @('app.js', $js), @('main.css', $css
 }
 Check 'banned words: regex live + zero hits' ($live -and ($hits.Count -eq 0)) ($hits -join ',')
 
-Check 'hours peg + no-RMB-peg + zero external deps' (($html -match '1 \u5c0f\u65f6 = 100 \u7c92') -and ($js -match 'toHours') -and ($html -match '\u4e0d\u4e0e\u4eba\u6c11\u5e01\u6302\u94a9') -and (([regex]::Matches($html, 'src="https?://') + [regex]::Matches($html, '<link[^>]+href="https?://')).Count -eq 0))
+Check 'hours peg + no-RMB-peg + zero external deps' (($html -match '1 \u5c0f\u65f6 = 10 \u7c92') -and ($js -match 'toHours') -and ($html -match '\u4e0d\u4e0e\u4eba\u6c11\u5e01\u6302\u94a9') -and (([regex]::Matches($html, 'src="https?://') + [regex]::Matches($html, '<link[^>]+href="https?://')).Count -eq 0))
+Check 'wallet page (dedicated RUCOIN wallet + soulbound note)' (($html -match 'id="s-wallet"') -and ($html -match 'id="wallet-addr"') -and ($html -match 'id="ledger-wallet"') -and ($js -match 'wallet-export'))
+Check 'hours audit page (certification check 1h=10mi)' (($html -match 'id="s-audit"') -and ($html -match 'id="audit-sum"') -and ($js -match 'serviceRecords') -and ($js -match 'renderAudit'))
 
 Push-Location "$root\contracts"
 npm run compile 2>&1 | Out-Null
