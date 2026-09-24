@@ -30,6 +30,7 @@ Check 'theme toggle reachable from auth screen' (($html -match 'id="auth-theme-b
 Check 'publish flow: position pricing (project-team set per role)' (($html -match 'id="pos-list"') -and ($js -match 'pos-row') -and ($js -match '\u804c\u4f4d\u5b9a\u4ef7'))
 Check 'rewards: campus institution network (canteen etc.)' (($html -match 'id="inst-list"') -and ($js -match '\u5927\u4f19\u98df\u5802'))
 Check 'no peer-review metering in product copy' (-not (($html + $js) -match '\u4e92\u8bc4\u5b9a\u4ef7|\u4e92\u8bc4\u8bb0\u5f55'))
+Check 'gift framing (thank-you not wage) + goods semester cap' ((($html + $js) -match '\u4f19\u4f34\u7b54\u8c22') -and ($js -match 'goodsUsed') -and ($js -match '200 \u7c92\u5c01\u9876'))
 Check 'design tokens (paper palette + small radius + serif + dual-mode + RUC-red)' (($css -match '#FCF7F0') -and ($css -match '--radius-lg: 6px') -and ($css -match '--font-serif') -and ($css -match 'cubic-bezier\(0\.34, 1\.56') -and ($css -match 'forced-color-adjust: none') -and ($css -match '\[data-theme="dark"\]') -and ($css -match 'prefers-reduced-motion') -and ($css -match '--accent: #8C2229'))
 
 $iconCss = Get-Content "$root\web\assets\icons\remixicon.css" -Raw

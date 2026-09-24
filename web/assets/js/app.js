@@ -38,15 +38,15 @@
   ];
 
   var rewards = [
-    { icon: "ri-coupon-fill",     title: "后勤面包券 · 1 张",   cost: 30,  note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
-    { icon: "ri-cup-fill",        title: "面包房咖啡券",        cost: 40,  note: "券源商户赞助 · 一次性核销", voucher: true },
-    { icon: "ri-restaurant-fill", title: "大伙食堂基本伙代金券 10 元", cost: 80, note: "大伙食堂（基本伙）· 一次性核销", voucher: true },
-    { icon: "ri-shopping-bag-fill", title: "校园超市代金券 5 元", cost: 45,  note: "校园超市 · 一次性核销", voucher: true },
-    { icon: "ri-printer-fill",    title: "打印券 50 页",        cost: 40,  note: "图书馆文印中心" },
-    { icon: "ri-gift-fill",       title: "RUCDAO 文创卫衣",     cost: 300, note: "稻穗印章限定款 · 每学期 50 件" },
-    { icon: "ri-bus-2-fill",      title: "名企参访名额",        cost: 250, note: "每学期 2 次 · 含车旅" },
-    { icon: "ri-seedling-fill",   title: "暑期乡村实践优先名额", cost: 350, note: "龙潭村等共建村庄" },
-    { icon: "ri-award-fill",      title: "年度志愿之星奖杯 + 证书", cost: 500, note: "校志协年会颁发 · 附荣誉徽章" }
+    { icon: "ri-coupon-fill",     title: "后勤面包券 · 1 张",   cost: 30,  kind: "goods", note: "学一食堂面包房 · 限本人 · 当日有效 · 一次性核销", voucher: true },
+    { icon: "ri-cup-fill",        title: "面包房咖啡券",        cost: 40,  kind: "goods", note: "券源商户赞助 · 一次性核销", voucher: true },
+    { icon: "ri-restaurant-fill", title: "大伙食堂基本伙代金券 10 元", cost: 80, kind: "goods", note: "大伙食堂（基本伙）· 一次性核销", voucher: true },
+    { icon: "ri-shopping-bag-fill", title: "校园超市代金券 5 元", cost: 45,  kind: "goods", note: "校园超市 · 一次性核销", voucher: true },
+    { icon: "ri-printer-fill",    title: "打印券 50 页",        cost: 40,  kind: "goods", note: "图书馆文印中心" },
+    { icon: "ri-gift-fill",       title: "RUCDAO 文创卫衣",     cost: 300, kind: "growth", note: "稻穗印章限定款 · 每学期 50 件" },
+    { icon: "ri-bus-2-fill",      title: "名企参访名额",        cost: 250, kind: "growth", note: "每学期 2 次 · 含车旅" },
+    { icon: "ri-seedling-fill",   title: "暑期乡村实践优先名额", cost: 350, kind: "growth", note: "龙潭村等共建村庄" },
+    { icon: "ri-award-fill",      title: "年度志愿之星奖杯 + 证书", cost: 500, kind: "growth", note: "校志协年会颁发 · 附荣誉徽章" }
   ];
 
   var institutions = [
@@ -102,7 +102,7 @@
     { project: "共学共创工作坊 #04", position: "志愿讲师", date: "10.18", hours: 1, status: "ok" }
   ];
 
-  var state = { balance: 234, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {}, user: null, sentCode: null, certApplying: false };
+  var state = { balance: 234, filter: "全部", joined: {}, redeemed: {}, vouchers: [], issued: {}, user: null, sentCode: null, certApplying: false, goodsUsed: 0 };
 
   // ---------------- 工具 ----------------
   function $(sel) { return document.querySelector(sel); }
@@ -175,7 +175,7 @@
         '<h3 style="font-size:17px;font-weight:700;margin:0 0 4px">' + esc(r.title) + '</h3>' +
         '<p class="muted">' + esc(r.note) + '</p>' +
         '<p class="reward-cost">' + fmt(r.cost) + ' 粒<small> ≈ ' + toHours(r.cost) + ' 小时</small></p>' +
-        '<button class="btn btn--filled" data-buy="' + i + '"' + (state.redeemed[i] ? " disabled" : "") + '>' + (state.redeemed[i] ? "已兑换 ✓" : "兑换") + '</button>' +
+        '<button class="btn btn--filled" data-buy="' + i + '"' + (state.redeemed[i] ? " disabled" : "") + '>' + (state.redeemed[i] ? "已领取 ✓" : "领取答谢") + '</button>' +
         '</article>';
     }).join("");
   }
@@ -193,7 +193,7 @@
   function renderVouchers() {
     var el = $("#voucher-list");
     if (!state.vouchers.length) {
-      el.innerHTML = '<p class="muted">暂无券。去权益商店兑一张面包券试试。</p>';
+      el.innerHTML = '<p class="muted">暂无券。去「伙伴答谢」领一张面包券试试。</p>';
       return;
     }
     el.innerHTML = state.vouchers.map(function (v) {
@@ -446,15 +446,19 @@
     if (t.dataset.buy !== undefined && !state.redeemed[t.dataset.buy]) {
       if (!requireLogin()) return;
       var r = rewards[+t.dataset.buy];
+      if (r.kind === "goods") {
+        if (state.goodsUsed + r.cost > 200) { toast("实物答谢每学期 200 粒封顶——心意不是报酬；荣誉与发展类不设限。"); return; }
+        state.goodsUsed += r.cost;
+      }
       if (state.balance < r.cost) { toast("米粒不足——去项目库接个项目攒时数吧。"); return; }
       state.redeemed[t.dataset.buy] = true;
       state.balance -= r.cost;
-      ledger.unshift({ amt: -r.cost, txt: "兑换：" + r.title, hash: "0x" + Math.random().toString(16).slice(2, 6) + "…演示 · redeem" });
-      var msg = "兑换成功（演示）· 到出示核销即可。";
+      ledger.unshift({ amt: -r.cost, txt: "答谢：" + r.title, hash: "0x" + Math.random().toString(16).slice(2, 6) + "…演示 · redeem" });
+      var msg = "已领取（演示）· 到店出示核销即可。";
       if (r.voucher) {
         var code = "RN-" + Math.random().toString(16).slice(2, 6).toUpperCase() + "-" + Math.random().toString(16).slice(2, 6).toUpperCase();
         state.vouchers.unshift({ title: r.title, code: code, note: "限本人 · 当日有效 · 一次性核销" });
-        msg = "兑券成功（演示）· 券码 " + code + " 已存入券包。";
+        msg = "答谢券已入券包（演示）· 券码 " + code + "，限本人当日核销。";
       }
       updateBalance(); renderRewards(); renderLedger(); renderVouchers();
       toast(msg);
